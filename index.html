@@ -5,217 +5,272 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>팀워크 메이커</title>
 <meta name="description" content="모둠 역할 성향 테스트 → 균형 팀 편성 → 협력 미션까지! 우리 반 팀워크 메이커">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-/* ============ 🧱 블록 픽셀 테마 (Galmuri11 픽셀 폰트, SIL OFL) ============ */
+/* =====================================================================
+   🧱 블록 월드 테마
+   - 제목·버튼: Galmuri11 픽셀 폰트 (SIL OFL, fonts/ 폴더)
+   - 본문: Pretendard (가독성)
+   - 아이콘·블록 텍스처: 코드로 직접 그린 16×16 픽셀 아트
+   ===================================================================== */
 @font-face{font-family:'Galmuri11';font-weight:400;font-display:swap;
   src:url('fonts/Galmuri11.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/Galmuri11.woff2') format('woff2')}
 @font-face{font-family:'Galmuri11';font-weight:700;font-display:swap;
   src:url('fonts/Galmuri11-Bold.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/Galmuri11-Bold.woff2') format('woff2')}
 :root{
-  --panel:#C6C6C6; --hi:#FFFFFF; --lo:#555555; --edge:#000000; --slot:#8B8B8B; --slot-hi:#FFFFFF; --slot-lo:#373737;
-  --text:#2B2B2B; --muted:#4E4E4E; --ink:#1E1E1E;
-  --green:#4E9A2F; --red:#B3312C; --blue:#2E5FB5; --yellow:#E8B820; --purple:#7B3FC0; --pink:#D2608F; --gold:#FCDB4A;
-  --bevel:inset 3px 3px 0 var(--hi),inset -3px -3px 0 var(--lo);
-  --bevel-c:inset 3px 3px 0 rgba(255,255,255,.45),inset -3px -3px 0 rgba(0,0,0,.45);
-  --drop:4px 4px 0 rgba(0,0,0,.5);
-  --tex-dirt:none; --tex-grass:none; --tex-stone:none;
+  --pixel:'Galmuri11',ui-monospace,monospace;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --text:#1D1D1D; --sub:#4A4A4A; --edge:#1D1D1D;
+  --panel:#F3F3F3; --panel-hi:#FFFFFF; --panel-lo:#A9A9A9;
+  --slot:#C9C9C9; --slot-lo:#8A8A8A; --slot-hi:#F2F2F2;
+  --grass:#5FAE36; --grass-d:#3F7F22; --sky1:#5BB3F0; --sky2:#BFE6FF;
+  --gold:#F4C430; --red:#D9483B; --blue:#3D7DD8;
+  --tex-grass-top:none; --tex-grass-side:none; --tex-stone:none;
 }
-*{box-sizing:border-box;margin:0;padding:0;border-radius:0!important}
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:'Galmuri11','DungGeunMo',ui-monospace,monospace;font-synthesis:none;color:#fff;
-  background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),var(--tex-dirt) #5B3E2B;background-size:auto,64px 64px;
-  image-rendering:pixelated;-webkit-font-smoothing:none;word-break:keep-all;line-height:1.55}
+body{font-family:var(--sans);color:var(--text);font-size:16px;line-height:1.6;word-break:keep-all;
+  background:linear-gradient(180deg,var(--sky1) 0%,#86CBF5 45%,var(--sky2) 100%) fixed;}
 button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
 input,select{font:inherit;color:inherit}
-#app{min-height:100%;display:flex;flex-direction:column}
-.wrap{width:100%;max-width:580px;margin:0 auto;padding:20px 16px 48px}
+img.px{image-rendering:pixelated;image-rendering:crisp-edges;display:inline-block;vertical-align:middle;flex:none}
+#app{min-height:100%;display:flex;flex-direction:column;position:relative;z-index:1}
+#app::after{content:'';display:block;margin-top:auto;height:72px;flex:none;
+  background:var(--tex-grass-side) #5FAE36;background-size:72px 72px;background-repeat:repeat-x;border-top:4px solid var(--grass-d);image-rendering:pixelated}
+
+/* 구름 */
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cloud{position:absolute;height:28px;background:#fff;opacity:.92;box-shadow:0 6px 0 rgba(255,255,255,.55);animation:drift linear infinite}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;height:28px;top:-24px}
+.cloud::before{left:20%;width:35%} .cloud::after{left:48%;width:28%;top:-14px}
+@keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+
+.wrap{width:100%;max-width:580px;margin:0 auto;padding:22px 16px 36px}
 .wide{max-width:1300px}
-.card{background:var(--panel);color:var(--text);border:3px solid var(--edge);box-shadow:var(--bevel),var(--drop);padding:20px}
-.card.dark{background:#2B2B2B;color:#fff;box-shadow:inset 3px 3px 0 #555,inset -3px -3px 0 #111,var(--drop)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:3px solid var(--edge);background:#7D7D7D;color:#fff;
-  box-shadow:var(--bevel-c);font-weight:700;font-size:16px;text-shadow:2px 2px 0 #3F3F3F;user-select:none;white-space:nowrap;transition:filter .08s}
-.btn:hover{filter:brightness(1.12);outline:2px solid #fff;outline-offset:-5px}
-.btn:active{box-shadow:inset -3px -3px 0 rgba(255,255,255,.35),inset 3px 3px 0 rgba(0,0,0,.5)}
-.btn:disabled{filter:grayscale(1) brightness(.75);cursor:not-allowed;outline:none;color:#BDBDBD}
-.btn.big{width:100%;padding:15px;font-size:19px}
-.btn.sm{padding:6px 11px;font-size:14px;border-width:2px;box-shadow:inset 2px 2px 0 rgba(255,255,255,.45),inset -2px -2px 0 rgba(0,0,0,.45)}
-.btn.yellow{background:#D9A520} .btn.red{background:var(--red)} .btn.blue{background:var(--blue)}
-.btn.green{background:#5AA83A} .btn.purple{background:var(--purple)} .btn.ink{background:#2B2B2B}
-.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;text-decoration:underline;font-weight:400;color:#E6E6E6;text-shadow:2px 2px 0 #000;outline:none}
-.card .btn.ghost{color:var(--muted);text-shadow:none}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.field label{font-weight:700;font-size:15px}
-.input{width:100%;padding:12px 13px;border:3px solid #A0A0A0;outline:3px solid #000;outline-offset:0;background:#000;color:#fff;font-size:17px}
-.input:focus{border-color:#fff}
-select.input option{background:#000;color:#fff}
-.muted{color:#D0D0D0} .card .muted{color:var(--muted)}
+
+/* 패널: 블록 GUI */
+.card{background:var(--panel);color:var(--text);border:3px solid var(--edge);padding:20px;
+  box-shadow:inset 4px 4px 0 var(--panel-hi),inset -4px -4px 0 var(--panel-lo),6px 6px 0 rgba(0,0,0,.28)}
+.card.grass{padding-top:34px;position:relative}
+.card.grass::before{content:'';position:absolute;left:0;right:0;top:0;height:18px;background:var(--tex-grass-top) var(--grass);background-size:36px 36px;border-bottom:3px solid var(--grass-d);image-rendering:pixelated}
+.card.dark{background:#3B3B3B;color:#fff;box-shadow:inset 4px 4px 0 #5A5A5A,inset -4px -4px 0 #232323,6px 6px 0 rgba(0,0,0,.28)}
+.card.dark .sub{color:#E2E2E2}
+.slotbg{background:var(--slot);border:3px solid var(--edge);box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
+
+/* 텍스트 */
+h1,h2,.btn,.tab,.qnum,.role-name,.tname,.count,.mc-title{font-family:var(--pixel);font-weight:700;letter-spacing:0}
+h1{font-size:30px;line-height:1.3}
+h2{font-size:24px;line-height:1.35}
+h3{font-size:18px;font-weight:800;line-height:1.4}
+.sub{color:var(--sub);font-weight:600}
+.note{font-size:14px;color:var(--sub);font-weight:600}
 .center{text-align:center} .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .between{justify-content:space-between} .grow{flex:1}
-h1{font-size:32px;font-weight:700;line-height:1.25;color:#fff;text-shadow:3px 3px 0 #3F3F3F}
-.card h1{color:var(--text);text-shadow:2px 2px 0 #fff}
-h2{font-size:23px;font-weight:700} h3{font-size:17px;font-weight:700}
-.mc-title{font-size:38px;color:#E0E0E0;text-shadow:3px 3px 0 #3A3A3A,6px 6px 0 rgba(0,0,0,.35);letter-spacing:1px}
-.mc-sub{display:inline-block;color:#FFFF55;text-shadow:2px 2px 0 #3F3F00;transform:rotate(-6deg);animation:pulse .6s ease-in-out infinite alternate;font-size:15px}
-@keyframes pulse{to{transform:rotate(-6deg) scale(1.08)}}
-.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border:2px solid #000;font-size:13px;font-weight:700;background:var(--slot);color:#fff;
-  text-shadow:1px 1px 0 #333;box-shadow:inset 2px 2px 0 var(--slot-lo),inset -2px -2px 0 var(--slot-hi)}
-.stack>*+*{margin-top:14px}
-.hero-emoji{font-size:64px;line-height:1;display:block;animation:bob 1.6s steps(4) infinite}
-@keyframes bob{50%{transform:translateY(-8px)}}
-@keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.stack>*+*{margin-top:16px}
+.warn-t{color:#B3261E!important} .ok-t{color:#2E7D1E!important}
+.ico-h{display:inline-flex;align-items:center;gap:8px}
+
+/* 메인 타이틀: 돌 질감의 입체 블록 글자 */
+.mc-title{font-size:44px;line-height:1.15;
+  background:linear-gradient(180deg,#F7F7F7 0%,#D4D4D4 48%,#9C9C9C 52%,#B9B9B9 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(2px 0 0 #222) drop-shadow(-2px 0 0 #222) drop-shadow(0 2px 0 #222) drop-shadow(0 -2px 0 #222) drop-shadow(0 5px 0 #3A3A3A) drop-shadow(3px 5px 0 rgba(0,0,0,.3))}
+.splash{display:inline-block;font-family:var(--pixel);font-weight:700;color:#FFF24A;font-size:17px;transform:rotate(-8deg);
+  text-shadow:2px 2px 0 #4A4100;animation:splash .55s ease-in-out infinite alternate;margin-top:6px}
+@keyframes splash{to{transform:rotate(-8deg) scale(1.1)}}
+
+/* 버튼: 블록 버튼 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:3px solid var(--edge);background:#8F8F8F;color:#fff;font-size:16px;
+  text-shadow:2px 2px 0 rgba(0,0,0,.45);user-select:none;white-space:nowrap;
+  box-shadow:inset 3px 3px 0 rgba(255,255,255,.45),inset -3px -3px 0 rgba(0,0,0,.35),0 4px 0 rgba(0,0,0,.35);transition:transform .06s,filter .06s}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(3px);box-shadow:inset 3px 3px 0 rgba(0,0,0,.3),inset -3px -3px 0 rgba(255,255,255,.3),0 1px 0 rgba(0,0,0,.35)}
+.btn:disabled{filter:grayscale(1) brightness(.85);cursor:not-allowed;opacity:.7}
+.btn.big{width:100%;padding:15px;font-size:19px}
+.btn.sm{padding:6px 11px;font-size:14px;border-width:2px;box-shadow:inset 2px 2px 0 rgba(255,255,255,.45),inset -2px -2px 0 rgba(0,0,0,.35),0 3px 0 rgba(0,0,0,.3)}
+.btn.yellow{background:var(--gold);color:#2B2000;text-shadow:1px 1px 0 rgba(255,255,255,.5)}
+.btn.green{background:var(--grass)} .btn.red{background:var(--red)} .btn.blue{background:var(--blue)}
+.btn.light{background:#E6E6E6;color:var(--text);text-shadow:none}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;text-decoration:underline;color:var(--sub);text-shadow:none;font-family:var(--sans);font-weight:700}
+.on-sky>.center .btn.ghost{color:#0E3B66}
+
+/* 입력 */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:800;font-size:15px}
+.input{width:100%;padding:12px 13px;border:3px solid var(--edge);background:#fff;font-size:17px;font-weight:600;outline:none;box-shadow:inset 3px 3px 0 #D6D6D6}
+.input:focus{background:#FFFBE0}
+
+/* 작은 라벨 */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border:2px solid var(--edge);font-size:13.5px;font-weight:800;background:#fff;color:var(--text);white-space:nowrap}
+.rtag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border:2px solid var(--edge);font-weight:800;font-size:14px;white-space:nowrap;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.5)}
+.rtag img{background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.4)}
+.legend{display:flex;flex-wrap:wrap;gap:6px}
+
+/* 3D 블록 */
+.cube-wrap{perspective:600px;display:flex;justify-content:center;align-items:center}
+.cube{--s:96px;width:var(--s);height:var(--s);position:relative;transform-style:preserve-3d;transform:rotateX(-24deg) rotateY(-35deg);animation:turn 9s linear infinite}
+.cube.still{animation:none}
+@keyframes turn{from{transform:rotateX(-24deg) rotateY(0)}to{transform:rotateX(-24deg) rotateY(360deg)}}
+.cube i{position:absolute;inset:0;background-size:100% 100%;image-rendering:pixelated;outline:2px solid rgba(0,0,0,.55);outline-offset:-1px}
+.cube .ft{transform:translateZ(calc(var(--s)/2))}
+.cube .bk{transform:rotateY(180deg) translateZ(calc(var(--s)/2))}
+.cube .rt{transform:rotateY(90deg) translateZ(calc(var(--s)/2));filter:brightness(.8)}
+.cube .lf{transform:rotateY(-90deg) translateZ(calc(var(--s)/2));filter:brightness(.8)}
+.cube .tp{transform:rotateX(90deg) translateZ(calc(var(--s)/2));filter:brightness(1.12)}
+.cube .bt{transform:rotateX(-90deg) translateZ(calc(var(--s)/2));filter:brightness(.6)}
+
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
-@keyframes spin{to{transform:rotate(360deg)}}
 .pop{animation:pop .3s steps(5) both}
 .slide{animation:slideIn .3s steps(6) both}
-.demo-bar{background:#100010;color:#FFFF55;font-size:13px;padding:7px 12px;text-align:center;border-bottom:2px solid #2B0A5C}
+.demo-bar{background:#26173D;color:#FFF07A;font-size:13.5px;font-weight:700;padding:7px 12px;text-align:center;border-bottom:3px solid #000;position:relative;z-index:2}
 .demo-bar b{color:#fff}
-.grass-top{position:relative}
-.grass-top::before{content:'';position:absolute;left:-3px;right:-3px;top:-3px;height:14px;background:var(--tex-grass) #5DA03A;background-size:64px 64px;border:3px solid #000;border-bottom:none}
-.grass-top>:first-child{margin-top:8px}
 
 /* ---------- 학생: 퀴즈 ---------- */
-.qtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.qtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px}
 .dots{display:flex;gap:4px}
-.dots i{width:14px;height:14px;border:2px solid #000;background:var(--slot);display:block;box-shadow:inset 2px 2px 0 var(--slot-lo)}
-.dots i.on{background:#5AA83A;box-shadow:inset 2px 2px 0 rgba(255,255,255,.4)} .dots i.cur{background:var(--gold);outline:2px solid #fff}
-.qcard{text-align:center;padding:30px 20px 24px;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px}
-.qnum{font-size:14px;letter-spacing:2px;background:#2B2B2B;color:#FFFF55;padding:4px 12px;border:2px solid #000}
-.qemoji{font-size:72px;line-height:1;width:116px;height:116px;display:flex;align-items:center;justify-content:center;background:var(--slot);border:3px solid #000;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
-.qtext{font-size:22px;font-weight:700;line-height:1.6;white-space:pre-line}
+.dots i{width:16px;height:16px;border:2px solid var(--edge);background:#E6E6E6;display:block;box-shadow:inset 2px 2px 0 #B5B5B5}
+.dots i.on{background:var(--grass);box-shadow:inset 2px 2px 0 rgba(255,255,255,.4)}
+.dots i.cur{background:var(--gold);transform:scale(1.2)}
+.qcard{text-align:center;padding:28px 20px 26px;min-height:320px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px}
+.qnum{font-size:14px;background:#3B3B3B;color:#FFF07A;padding:5px 12px;border:2px solid #000}
+.qicon{width:120px;height:120px;display:flex;align-items:center;justify-content:center}
+.qtext{font-size:23px;font-weight:800;line-height:1.55;white-space:pre-line}
 .yn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.yn .btn{padding:18px 10px;font-size:22px;flex-direction:column;gap:4px}
-.yn .btn small{font-size:13px;font-weight:400}
-.analyzing{text-align:center;padding:60px 20px}
-.analyzing .spinner{width:64px;height:64px;margin:0 auto 20px;background:var(--tex-grass) #5DA03A;background-size:64px 64px;border:3px solid #000;animation:spin 1.2s steps(8) infinite}
+.yn .btn{padding:16px 10px;font-size:24px;flex-direction:column;gap:2px}
+.yn .btn small{font-size:14px;font-family:var(--sans);font-weight:700;text-shadow:none;opacity:.95}
+.analyzing{text-align:center;padding:30px 20px 40px}
 
 /* ---------- 역할 카드 ---------- */
-.rolecard{position:relative;overflow:hidden;text-align:center;padding:26px 20px}
-.rolecard .band{position:absolute;inset:0 0 auto 0;height:104px;border-bottom:3px solid #000;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25)}
+.rolecard{position:relative;overflow:hidden;text-align:center;padding:24px 20px}
+.rolecard .band{position:absolute;inset:0 0 auto 0;height:100px;border-bottom:3px solid var(--edge);box-shadow:inset 0 -6px 0 rgba(0,0,0,.18)}
 .rolecard .inner{position:relative}
-.role-emoji{font-size:60px;width:104px;height:104px;margin:0 auto;border:3px solid #000;background:var(--slot);display:flex;align-items:center;justify-content:center;
-  box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi),var(--drop)}
-.role-name{font-size:30px;font-weight:700;margin-top:12px;color:#fff;text-shadow:3px 3px 0 #3F3F3F,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
-.role-job{margin-top:6px}
+.role-icon{width:112px;height:112px;margin:0 auto;display:flex;align-items:center;justify-content:center}
+.role-name{font-size:32px;margin-top:10px}
 .traits{text-align:left;margin-top:16px;display:grid;gap:6px}
-.traits div{background:#B0B0B0;border:2px solid #000;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E;padding:8px 12px;font-size:15px}
-.tip{margin-top:14px;padding:12px 14px;border:2px solid #2B0A5C;outline:2px solid #100010;background:#100010;color:#fff;font-size:15px;text-align:left}
-.bars{display:grid;gap:7px;margin-top:6px}
-.bar{display:grid;grid-template-columns:182px 1fr 34px;align-items:center;gap:8px;font-size:14px}
-.bar>span:first-child{white-space:nowrap}
-.bar .track{height:14px;border:2px solid #000;background:#2B2B2B;overflow:hidden}
-.bar .fill{height:100%;border-right:2px solid #000;transition:width .8s steps(10);box-shadow:inset 0 3px 0 rgba(255,255,255,.35)}
-.waiting{display:flex;align-items:center;gap:12px}
-.waiting .dotdot span{animation:blink 1.2s steps(1) infinite;display:inline-block}
-.waiting .dotdot span:nth-child(2){animation-delay:.3s}.waiting .dotdot span:nth-child(3){animation-delay:.6s}
+.traits div{padding:9px 12px 9px 10px;font-size:15.5px;font-weight:700;display:flex;gap:8px;align-items:center;background:#E4E4E4;border:2px solid var(--edge);box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #B0B0B0}
+.tip{margin-top:14px;padding:12px 14px;border:3px solid #6B4A2F;background:#FFF4D2;font-size:15.5px;font-weight:700;text-align:left;display:flex;gap:10px;align-items:flex-start;box-shadow:inset 3px 3px 0 #FFFBEA}
+.bars{display:grid;gap:8px;margin-top:8px}
+.bar{display:grid;grid-template-columns:190px 1fr 40px;align-items:center;gap:8px;font-size:15px;font-weight:700}
+.bar>span:first-child{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.bar>span:last-child{text-align:right}
+.track{height:16px;border:2px solid var(--edge);background:#3B3B3B;overflow:hidden}
+.track .fill{height:100%;border-right:2px solid var(--edge);box-shadow:inset 0 4px 0 rgba(255,255,255,.35);transition:width .8s steps(12)}
+.waiting{display:flex;align-items:center;gap:12px;font-weight:800;font-size:17px}
+.dotdot span{animation:blink 1.2s steps(1) infinite;display:inline-block}
+.dotdot span:nth-child(2){animation-delay:.3s}.dotdot span:nth-child(3){animation-delay:.6s}
 @keyframes blink{50%{opacity:0}}
-.tasklist{display:grid;gap:8px;margin-top:10px;text-align:left}
-.tasklist div{display:flex;gap:8px;align-items:flex-start;font-size:15px}
-.tasklist b{flex:none;width:24px;height:24px;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--gold);color:#3F2F00;box-shadow:inset -2px -2px 0 rgba(0,0,0,.3)}
+.tasklist{display:grid;gap:8px;margin-top:12px;text-align:left}
+.tasklist div{display:flex;gap:10px;align-items:flex-start;font-size:16px;font-weight:600}
+.tasklist b{flex:none;width:26px;height:26px;border:2px solid var(--edge);display:flex;align-items:center;justify-content:center;font-family:var(--pixel);font-size:14px;background:var(--gold);box-shadow:inset -2px -2px 0 rgba(0,0,0,.25)}
 
 /* ---------- 학생: 팀 / 미션 ---------- */
-.teambanner{text-align:center;padding:24px 18px}
-.teambanner .tname{font-size:28px;font-weight:700;color:#fff;text-shadow:3px 3px 0 #3F3F3F,-1px -1px 0 #000,1px 1px 0 #000}
-.level{display:flex;align-items:center;gap:12px;margin-top:14px;text-align:left}
-.level .mon{font-size:42px;width:70px;height:70px;border:3px solid #000;background:var(--slot);display:flex;align-items:center;justify-content:center;flex:none;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
-.gauge{height:22px;border:3px solid #000;background:#1E1E1E;overflow:hidden;position:relative}
-.gauge::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),#000 calc(10% - 2px) 10%);pointer-events:none}
-.gauge .fill{height:100%;background:#80D830;box-shadow:inset 0 4px 0 #B8FF6A,inset 0 -4px 0 #4E8F18;transition:width .9s steps(10)}
-.gauge.green .fill{background:#4ACD5A;box-shadow:inset 0 4px 0 #9BFFA5,inset 0 -4px 0 #237A2E}
-.gauge.blue .fill{background:#4FC3E8;box-shadow:inset 0 4px 0 #A5EEFF,inset 0 -4px 0 #1E7FA0}
-.gauge .lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;z-index:1}
+.teambanner{text-align:center}
+.tname{font-size:28px;margin-top:6px}
+.level{display:flex;align-items:center;gap:12px;margin-top:16px;text-align:left}
+.level .mon{width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex:none}
+.gauge{height:24px;border:3px solid var(--edge);background:#2A2A2A;overflow:hidden;position:relative}
+.gauge::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),rgba(0,0,0,.6) calc(10% - 2px) 10%);pointer-events:none}
+.gauge .fill{height:100%;background:#8FE03C;box-shadow:inset 0 4px 0 #C6FF86,inset 0 -4px 0 #5C9E1E;transition:width .9s steps(12)}
+.gauge.green .fill{background:#45C95A;box-shadow:inset 0 4px 0 #9BFFA5,inset 0 -4px 0 #237A2E}
+.gauge.blue .fill{background:#4FC3E8;box-shadow:inset 0 4px 0 #B3F1FF,inset 0 -4px 0 #1E7FA0}
+.gauge .lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:4px;font-size:13px;font-weight:800;color:#fff;z-index:1;
+  text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
 .members{display:grid;gap:6px}
-.member{display:flex;align-items:center;gap:10px;padding:8px 10px;border:2px solid #000;background:#B0B0B0;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E}
-.member.me{background:#E8D58A;box-shadow:inset 2px 2px 0 #FFF3BE,inset -2px -2px 0 #A08A30;outline:2px solid #fff;outline-offset:-6px}
-.member .remoji{font-size:24px;width:44px;height:44px;border:2px solid #000;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:var(--bevel-c)}
-.member .who{font-weight:700}
-.member .what{font-size:13px;color:#3A3A3A}
-.member .chk{margin-left:auto;font-size:22px}
+.member{display:flex;align-items:center;gap:10px;padding:8px 10px;border:2px solid var(--edge);background:#E4E4E4;box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #B0B0B0}
+.member.me{background:#FFF0B3;box-shadow:inset 2px 2px 0 #FFFBE0,inset -2px -2px 0 #D2B54A}
+.member .ricon{width:46px;height:46px;border:2px solid var(--edge);display:flex;align-items:center;justify-content:center;flex:none;box-shadow:inset 2px 2px 0 rgba(255,255,255,.45),inset -2px -2px 0 rgba(0,0,0,.25)}
+.member .who{font-weight:800;font-size:16px}
+.member .what{font-size:14px;color:var(--sub);font-weight:600;line-height:1.45}
+.member .chk{margin-left:auto}
 .mission{padding:0;overflow:hidden}
-.mission .mhead{padding:14px 18px;background:#2B2B2B;color:#fff;display:flex;gap:12px;align-items:center;border-bottom:3px solid #000}
-.mission .mhead .me{font-size:38px}
-.mission .mbody{padding:16px 18px}
-.mytask{border:3px solid #000;padding:14px;background:#E8D58A;box-shadow:inset 3px 3px 0 #FFF3BE,inset -3px -3px 0 #A08A30;margin:12px 0}
-.mytask .lab{font-size:13px;color:#5A4A10}
-.mytask .txt{font-size:19px;font-weight:700;margin-top:4px}
-.donebtn.on{background:#5AA83A}
+.mhead{padding:14px 18px;color:#fff;display:flex;gap:12px;align-items:center;border-bottom:3px solid var(--edge);
+  background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),var(--tex-stone) #6B6B6B;background-size:auto,48px 48px;image-rendering:pixelated}
+.mhead .kicker{font-family:var(--pixel);font-size:12px;color:#FFF07A}
+.mhead .ttl{font-family:var(--pixel);font-weight:700;font-size:21px;text-shadow:2px 2px 0 #000}
+.mhead img{background:rgba(255,255,255,.9);border:2px solid #000;padding:2px}
+.mbody{padding:16px 18px}
+.mbody .desc{font-weight:700;font-size:16.5px}
+.mytask{border:3px solid var(--edge);padding:14px;background:#FFF0B3;box-shadow:inset 3px 3px 0 #FFFBE0,inset -3px -3px 0 #D2B54A;margin:12px 0}
+.mytask .lab{font-size:14px;font-weight:800;color:#6B5200;display:flex;align-items:center;gap:6px}
+.mytask .txt{font-size:20px;font-weight:800;margin-top:4px}
+.donebtn.on{background:var(--grass)}
 .goalbox{display:flex;align-items:center;gap:12px}
-.goalbox .gift{font-size:36px}
 
 /* ---------- 오버레이 ---------- */
-#overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(16,0,16,.78);padding:16px}
+#overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(12,20,40,.72);padding:16px}
 #overlay.show{display:flex}
-.count{font-size:160px;font-weight:700;color:var(--gold);text-shadow:8px 8px 0 #3F3000;animation:pop .3s steps(4) both}
-.slotbox,.tslot{background:var(--panel);color:var(--text);border:3px solid #000;box-shadow:var(--bevel),6px 6px 0 #000;padding:24px;text-align:center;width:100%;max-width:440px}
+.count{font-size:150px;color:#FFF24A;text-shadow:6px 6px 0 #4A4100;-webkit-text-stroke:3px #000;animation:pop .3s steps(4) both}
+.slotbox,.tslot{background:var(--panel);color:var(--text);border:3px solid var(--edge);padding:24px;text-align:center;width:100%;max-width:440px;
+  box-shadow:inset 4px 4px 0 var(--panel-hi),inset -4px -4px 0 var(--panel-lo),8px 8px 0 rgba(0,0,0,.4)}
 .tslot{max-width:1000px;max-height:92vh;overflow:auto;text-align:left}
-.slotwin{height:124px;overflow:hidden;border:3px solid #000;background:var(--slot);box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi);margin:14px 0;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-shadow:2px 2px 0 #333}
-.slotwin .se{font-size:50px;line-height:1}
-.slotwin .st{font-size:20px;font-weight:700;margin-top:6px}
-.slotwin.rolling .se,.slotwin.rolling .st{filter:blur(1px)}
+.slotwin{height:150px;margin:14px 0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px}
+.slotwin .st{font-family:var(--pixel);font-weight:700;font-size:20px}
+.slotwin.rolling img,.slotwin.rolling .st{filter:blur(1px);opacity:.75}
 .tslot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
-.tslot-cell{border:3px solid #000;padding:14px;text-align:center;background:var(--slot);color:#fff;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
-.tslot-cell .note{color:#fff!important}
-.tslot-cell .se{font-size:44px}
-.tslot-cell .st{font-weight:700;font-size:18px;margin-top:4px;text-shadow:2px 2px 0 #333}
-.tslot-cell.rolling .se,.tslot-cell.rolling .st{filter:blur(1px);opacity:.8}
-.tslot-cell.landed{background:#D9A520;box-shadow:var(--bevel-c);animation:pop .3s steps(4) both}
+.tslot-cell{padding:14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.tslot-cell .st{font-family:var(--pixel);font-weight:700;font-size:18px}
+.tslot-cell .tn{font-weight:800;display:flex;align-items:center;gap:6px}
+.tslot-cell.rolling img,.tslot-cell.rolling .st{filter:blur(1px);opacity:.7}
+.tslot-cell.rolling .tn img{filter:none;opacity:1}
+.tslot-cell.landed{background:#FFE58A;box-shadow:inset 3px 3px 0 #FFF6CC,inset -3px -3px 0 #C9A21E;animation:pop .3s steps(4) both}
 
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140px);background:#100010;color:#fff;padding:12px 18px;border:3px solid #2B0A5C;outline:2px solid #100010;z-index:60;transition:transform .25s steps(5),visibility .25s;visibility:hidden;max-width:calc(100% - 32px);text-align:center}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140px);visibility:hidden;background:#26173D;color:#fff;font-weight:700;padding:12px 18px;
+  border:3px solid #000;box-shadow:inset 2px 2px 0 #4A2F78;z-index:60;transition:transform .25s steps(5),visibility .25s;max-width:calc(100% - 32px);text-align:center}
 #toast.show{transform:translateX(-50%) translateY(0);visibility:visible}
-.confetti{position:fixed;top:-40px;width:14px;height:14px;z-index:70;pointer-events:none;border:2px solid rgba(0,0,0,.5);animation:fall linear forwards}
+.confetti{position:fixed;top:-40px;z-index:70;pointer-events:none;border:2px solid rgba(0,0,0,.45);animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
 
 /* ---------- 교사 ---------- */
-.thead{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--tex-stone) #6B6B6B;background-size:auto,64px 64px;color:#fff;padding:12px 16px;position:sticky;top:0;z-index:20;border-bottom:3px solid #000}
+.thead{position:sticky;top:0;z-index:20;color:#fff;padding:12px 16px 16px;border-bottom:4px solid #000;
+  background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.38)),var(--tex-grass-side) #6B4A2F;background-size:auto,64px 64px;image-rendering:pixelated}
 .thead .in{max-width:1300px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.thead .logo{font-weight:700;font-size:18px;margin-right:6px;text-shadow:2px 2px 0 #000}
-.thead select{padding:7px 10px;border:3px solid #A0A0A0;outline:2px solid #000;background:#000;color:#fff}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0}
-.tab{padding:10px 16px;border:3px solid #000;background:#7D7D7D;color:#fff;text-shadow:2px 2px 0 #3F3F3F;font-size:16px;box-shadow:var(--bevel-c)}
-.tab.on{background:var(--panel);color:var(--text);text-shadow:none;box-shadow:var(--bevel);transform:translateY(-3px)}
+.thead .logo{font-family:var(--pixel);font-weight:700;font-size:19px;text-shadow:2px 2px 0 #000;display:flex;align-items:center;gap:8px}
+.thead select{padding:7px 10px;border:3px solid #000;background:#fff;color:var(--text);font-weight:800}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:20px 0 16px}
+.tab{padding:10px 16px;border:3px solid var(--edge);background:#8F8F8F;color:#fff;font-size:16px;text-shadow:2px 2px 0 rgba(0,0,0,.45);
+  box-shadow:inset 3px 3px 0 rgba(255,255,255,.4),inset -3px -3px 0 rgba(0,0,0,.3)}
+.tab.on{background:var(--panel);color:var(--text);text-shadow:none;transform:translateY(-3px);box-shadow:inset 3px 3px 0 #fff,inset -3px -3px 0 #A9A9A9,0 4px 0 rgba(0,0,0,.3)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .stat{padding:14px 16px}
-.stat .n{font-size:32px;font-weight:700}
-.stat .l{color:var(--muted);font-size:14px}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin-top:12px}
-.scell{display:flex;align-items:center;gap:8px;padding:7px 10px;border:2px solid #000;background:#B0B0B0;font-size:15px;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E}
-.scell .x{margin-left:auto;opacity:.45;font-size:14px;padding:2px 6px}
+.stat .n{font-family:var(--pixel);font-weight:700;font-size:34px}
+.stat .l{font-weight:800;color:var(--sub);font-size:14px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:6px;margin-top:12px}
+.scell{display:flex;align-items:center;gap:8px;padding:6px 8px;border:2px solid var(--edge);background:#E4E4E4;font-size:15px;font-weight:700;box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #B0B0B0}
+.scell .x{margin-left:auto;opacity:.45;font-size:14px;padding:2px 6px;font-weight:800}
 .scell .x:hover{opacity:1;color:var(--red)}
-.scell.testing{background:#8F8F8F;color:#E0E0E0}
-.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.tcol{background:var(--panel);color:var(--text);border:3px solid #000;box-shadow:var(--bevel),var(--drop);padding:12px;min-height:160px}
-.tcol.over{background:#E8D58A;outline:3px solid #fff;outline-offset:-8px}
-.tcol h3{display:flex;align-items:center;gap:6px}
-.tcol .miss{font-size:12px;color:var(--muted);margin:4px 0 8px;min-height:16px}
-.tcol .miss .warn{color:#A01010}
+.scell.testing{background:#D2D2D2;color:#5A5A5A}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}
+.tcol{padding:12px;min-height:160px}
+.tcol.over{background:#FFF0B3;outline:3px dashed #000;outline-offset:-10px}
+.tcol h3{display:flex;align-items:center;gap:8px}
+.tcol .miss{font-size:13px;font-weight:700;color:var(--sub);margin:4px 0 8px;min-height:20px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.tcol .miss .warn{color:#B3261E;display:inline-flex;align-items:center;gap:3px}
 .chips{display:grid;gap:5px}
-.chip{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;padding:6px 8px;border:2px solid #000;background:#B0B0B0;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E;
-  cursor:grab;touch-action:none;user-select:none;font-size:15px}
+.chip{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;padding:6px 8px;border:2px solid var(--edge);background:#E4E4E4;box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #B0B0B0;
+  cursor:grab;touch-action:none;user-select:none;font-size:15px;font-weight:700}
 .chip .nm{white-space:nowrap}
-.chip .rsel{margin-left:auto;flex:0 0 auto;font-size:13px;border:2px solid #A0A0A0;outline:1px solid #000;padding:3px 4px;background:#000;color:#fff;max-width:none;width:auto}
-.chip .tend{font-size:12px}
-.chip.dup{background:#D98A8A;box-shadow:inset 2px 2px 0 #F2B8B8,inset -2px -2px 0 #8A3A3A}
+.chip .rsel{margin-left:auto;flex:0 0 auto;font-size:14px;font-weight:700;border:2px solid var(--edge);padding:3px 4px;background:#fff;width:auto}
+.chip.dup{background:#F6C1BC;box-shadow:inset 2px 2px 0 #FFE3E0,inset -2px -2px 0 #C2756D}
 .chip.src{opacity:.35}
-.chip.ghost{position:fixed;z-index:80;pointer-events:none;box-shadow:6px 6px 0 rgba(0,0,0,.6);cursor:grabbing;outline:2px solid #fff}
-.pool{background:#9A9A9A}
-.legend{display:flex;flex-wrap:wrap;gap:6px}
+.chip.ghost{position:fixed;z-index:80;pointer-events:none;box-shadow:6px 6px 0 rgba(0,0,0,.45);cursor:grabbing}
+.tcol.pool{background:#DADADA}
 .tmcard{padding:16px}
-.tmcard .cur{border:2px solid #000;padding:10px 12px;background:#B0B0B0;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E;margin:10px 0}
+.tmcard .cur{padding:10px 12px;margin:10px 0;background:#E4E4E4;border:2px solid var(--edge);box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #B0B0B0}
 .mchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.mchip{padding:5px 9px;border:2px solid #000;font-size:14px;background:var(--slot);color:#fff;text-shadow:1px 1px 0 #333;box-shadow:inset 2px 2px 0 var(--slot-lo),inset -2px -2px 0 var(--slot-hi)}
-.mchip.ok{background:#5AA83A;box-shadow:var(--bevel-c)}
-.qr{background:#fff;padding:8px;border:3px solid #000;display:inline-block}
+.mchip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px 3px 4px;border:2px solid var(--edge);font-size:14px;font-weight:700;background:#fff}
+.mchip.ok{background:var(--grass);color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+.qr{background:#fff;padding:8px;border:3px solid var(--edge);display:inline-block}
 .qr img,.qr canvas{display:block;width:140px;height:140px}
-.urlbox{font-size:14px;background:#000;color:#fff;border:2px solid #A0A0A0;outline:2px solid #000;padding:8px 10px;word-break:break-all}
-.note{font-size:13px;color:#D0D0D0} .card .note,.tcol .note{color:var(--muted)}
-.warn-t{color:#A01010!important} .ok-t{color:#1E6B10!important}
+.urlbox{font-size:14px;font-weight:600;background:#fff;border:2px solid var(--edge);padding:8px 10px;word-break:break-all;font-family:ui-monospace,Menlo,monospace}
 @media (max-width:600px){
-  h1{font-size:26px} .mc-title{font-size:30px} .qtext{font-size:19px} .board{grid-template-columns:1fr}
-  .bar{grid-template-columns:166px 1fr 30px;font-size:13px}
+  h1{font-size:26px} .mc-title{font-size:34px} .qtext{font-size:20px} .board{grid-template-columns:1fr}
+  .bar{grid-template-columns:172px 1fr 34px;font-size:14px}
 }
-@media print{.thead,.tabs,.btn{display:none!important}}
+@media print{.thead,.tabs,.btn,#sky{display:none!important}}
 </style>
 </head>
 <body>
+<div id="sky"></div>
 <div id="app"></div>
 <div id="overlay"></div>
 <div id="toast"></div>
@@ -240,95 +295,222 @@ const ADMIN_PW = '1107';
 const ROOT = 'teamMaker';
 
 /* =====================================================================
+   🎨 픽셀 아이콘 (16×16) — 문자 하나가 픽셀 하나, '.'은 투명
+   ===================================================================== */
+const K='#1B1B1B';
+const PIX = {
+  heart:{p:{k:K,r:'#E8434B',R:'#A8232B',w:'#FFFFFF'},m:[
+    "................","................","..kkkk....kkkk..",".krrrrk..krrrrk.","krwwrrrkkrrrrrRk","krwrrrrrrrrrrrRk","krrrrrrrrrrrrrRk","krrrrrrrrrrrrRRk",
+    ".krrrrrrrrrrRRk.","..krrrrrrrrRRk..","...krrrrrrRRk...","....krrrrRRk....",".....krrRRk.....","......kRRk......",".......kk.......","................"]},
+  star:{p:{k:K,y:'#FFD23F',Y:'#D49A00',w:'#FFF7C2'},m:[
+    "................",".......kk.......","......kyyk......","......kyyk......",".....kyyyyk.....","kkkkkyywyyykkkkk","kyyyyyywyyyyyyyk",".kyyyyyyyyyyyYk.",
+    "..kyyyyyyyyyYk..","...kyyyyyyyYk...","...kyyyyyyyYk...","..kyyyykkyyyYk..","..kyyk....kyYk..",".kyk........kYk.",".kk..........kk.","................"]},
+  torch:{p:{k:K,y:'#FFF27A',O:'#FF9F1C',o:'#E2611B',b:'#8B5E3C',B:'#5E3D22'},m:[
+    "................","......y..y......",".....yyOyyy.....",".....yOOOOy.....","......OOOO......",".....kooook.....",".....kbbbbk.....","......bbBB......",
+    "......bbBB......","......bbBB......","......bbBB......","......bbBB......","......bbBB......","......bbBB......","......kkkk......","................"]},
+  megaphone:{p:{k:K,r:'#D9483B',w:'#F2F2F2',y:'#FFD23F'},m:[
+    "................","...........kk...",".........kkrrk..",".......kkrrrrk.y",".kkkkkkrrrrrrk..",".kwwwwkrrrrrrk..",".kwwwwkrrrrrrkyy",".kwwwwkrrrrrrk..",
+    ".kkkkkkrrrrrrk..","....kk.kkrrrrk.y","....kk...kkrrk..","....kk.....kk...","....kk..........","....kk..........","................","................"]},
+  brush:{p:{k:K,b:'#A9773F',g:'#BDBDBD',p:'#9A5BD6',P:'#6A2FA8'},m:[
+    "................","............kk..","...........kbbk.","..........kbbk..",".........kbbk...","........kbbk....",".......kggk.....","......kggk......",
+    "....kkppk.......","...kppppk.......","..kpppPk........","..kppPk.........",".kpPkk..........",".kkk............","................","................"]},
+  chest:{p:{k:K,b:'#A8743A',B:'#7A5126',y:'#FFD23F'},m:[
+    "................","................",".kkkkkkkkkkkkkk.",".kbbbbbbbbbbbbk.",".kbBBBBBBBBBBbk.",".kbbbbbbbbbbbbk.",".kkkkkkyykkkkkk.",".kbbbbbyybbbbbk.",
+    ".kbBBBBkkBBBBbk.",".kbbbbbbbbbbbbk.",".kbBBBBBBBBBBbk.",".kbbbbbbbbbbbbk.",".kbBBBBBBBBBBbk.",".kkkkkkkkkkkkkk.","................","................"]},
+  pick:{p:{k:K,h:'#9C7A45',H:'#6B5230',b:'#6B4A2F'},m:[
+    "................",".....kkkkkk.....","....khhhhhhkk...","...khHkkkkhhhk..","..khHk....kbhhk.","..kHk....kbbkhk.","..kk....kbbk.kk.",".......kbbk.....",
+    "......kbbk......",".....kbbk.......","....kbbk........","...kbbk.........","..kbbk..........","..kbk...........","..kk............","................"]},
+  die:{p:{k:K,w:'#FAFAFA',g:'#BDBDBD',G:'#8E8E8E'},m:[
+    "................",".kkkkkkkkkkkkkk.",".kwwwwwwwwwwwgk.",".kwkkwwwwwwwwgk.",".kwkkwwwwwwwwgk.",".kwwwwwwwwwwwgk.",".kwwwwwkkwwwwgk.",".kwwwwwkkwwwwgk.",
+    ".kwwwwwwwwwwwgk.",".kwwwwwwwwkkwgk.",".kwwwwwwwwkkwgk.",".kwwwwwwwwwwwgk.",".kgggggggggggGk.",".kkkkkkkkkkkkkk.","................","................"]},
+  lock:{p:{k:K,g:'#BDBDBD',y:'#FFD23F',Y:'#D49A00'},m:[
+    "................",".....kkkkkk.....","....kggggggk....","...kgk....kgk...","...kgk....kgk...","...kgk....kgk...","..kkkkkkkkkkkk..","..kyyyyyyyyyyk..",
+    "..kyYYYkkYYYyk..","..kyyyykkyyyyk..","..kyYYYkkYYYyk..","..kyyyyyyyyyyk..","..kyYYYYYYYYyk..","..kkkkkkkkkkkk..","................","................"]},
+  check:{p:{k:K,g:'#5FD34A'},m:[
+    "................","................",".............kk.","............kgk.","...........kggk.","..........kggk..",".kk......kggk...",".kgk....kggk....",
+    ".kggk..kggk.....","..kggkkggk......","...kggggk.......","....kggk........",".....kk.........","................","................","................"]},
+  hourglass:{p:{k:K,b:'#8B5E3C',w:'#E9F6FF',y:'#F4C430'},m:[
+    "................","..kkkkkkkkkkkk..","..kbbbbbbbbbbk..","...kwwwwwwwwk...","...kwyyyyyywk...","....kwyyyywk....",".....kwyywk.....","......kyyk......",
+    "......kwwk......",".....kwwywk.....","....kwwyywwk....","...kwyyyyyywk...","...kwyyyyyywk...","..kbbbbbbbbbbk..","..kkkkkkkkkkkk..","................"]},
+  bubble:{p:{k:K,w:'#FFFFFF',g:'#C9C9C9',t:'#5A5A5A'},m:[
+    "................","..kkkkkkkkkkkk..",".kwwwwwwwwwwwwk.",".kwttttttttwwwk.",".kwwwwwwwwwwwwk.",".kwttttttwwwwwk.",".kwwwwwwwwwwwwk.",".kwttttwwwwwwwk.",
+    ".kwwwwwwwwwwwgk.","..kkkkwwkkkkkk..",".....kwk........","....kwk.........","....kk..........","................","................","................"]},
+  paper:{p:{k:K,w:'#FFF8E1',t:'#8A8A8A'},m:[
+    "................","...kkkkkkkkkk...","...kwwwwwwwwk...","...kwttttttwk...","...kwwwwwwwwk...","...kwttttttwk...","...kwwwwwwwwk...","...kwtttttwwk...",
+    "...kwwwwwwwwk...","...kwttttttwk...","...kwwwwwwwwk...","...kwtttwwwwk...","...kwwwwwwwwk...","...kkkkkkkkkk...","................","................"]},
+  shield:{p:{k:K,b:'#3D7DD8',B:'#2A5AA6',y:'#FFD23F'},m:[
+    "................","..kkkkkkkkkkkk..","..kbbbbbbbbbBk..","..kbbbbyybbbBk..","..kbbbbyybbbBk..","..kbbyyyyyybBk..","..kbbyyyyyybBk..","..kbbbbyybbbBk..",
+    "...kbbbyybbBk...","...kbbbbbbbBk...","....kbbbbbBk....",".....kbbbBk.....","......kbBk......",".......kk.......","................","................"]},
+  arrows:{p:{k:K,g:'#5FD34A',b:'#4FC3E8'},m:[
+    "................",".........k......",".........kk.....","..kkkkkkkkgk....","..kggggggggggk..","..kkkkkkkkgk....",".........kk.....",".....k...k......",
+    "....kk..........","...kbkkkkkkkkk..","..kbbbbbbbbbbk..","...kbkkkkkkkkk..","....kk..........",".....k..........","................","................"]},
+  person:{p:{k:K,s:'#E9B48A',h:'#5A3A22',e:'#2B2B2B',c:'#3D7DD8',p:'#3B3B6B'},m:[
+    "................","....kkkkkkkk....","....khhhhhhk....","....khsssshk....","....kseseesk....","....kssssssk....","....kkssssk.....","...kkcccccckk...",
+    "..kccccccccccck.","..kckccccccckck.","..kck.kcck.kck..","..kk..kcck..kk..","......kppk......","......kppk......","......kkkk......","................"]}
+};
+// 원형 아이콘(나침반·시계·폭탄·돋보기·카메라)은 코드로 그림
+function drawProcedural(name,g){
+  const P=(x,y,c)=>{g.fillStyle=c;g.fillRect(x,y,1,1)};
+  const circ=(cx,cy,r,c)=>{for(let y=0;y<16;y++)for(let x=0;x<16;x++){if(Math.hypot(x+.5-cx,y+.5-cy)<=r)P(x,y,c)}};
+  if(name==='compass'||name==='clock'){
+    circ(8,8,7.6,K);circ(8,8,6.6,'#F4C430');circ(8,8,5.4,'#FAFAFA');
+    if(name==='compass'){[[8,3],[7,4],[8,4],[7,5],[8,5],[7,6],[8,6]].forEach(([x,y])=>P(x,y,'#E8434B'));
+      [[7,9],[8,9],[7,10],[8,10],[7,11],[8,11],[8,12]].forEach(([x,y])=>P(x,y,'#6B6B6B'));P(7,7,K);P(8,7,K);P(7,8,K);P(8,8,K)}
+    else{for(let y=4;y<=8;y++)P(7,y,K);for(let x=7;x<=11;x++)P(x,8,K);P(3,8,'#9A9A9A');P(12,8,'#9A9A9A');P(7,3,'#9A9A9A');P(7,12,'#9A9A9A')}
+  }else if(name==='bomb'){
+    circ(7.5,9.5,6.4,K);circ(7.5,9.5,5.4,'#3B3B3B');P(5,7,'#8A8A8A');P(4,8,'#8A8A8A');P(5,8,'#6B6B6B');
+    [[10,3],[11,2],[10,4]].forEach(([x,y])=>P(x,y,'#8B5E3C'));[[12,1],[13,1],[12,0],[13,2],[14,1]].forEach(([x,y])=>P(x,y,'#FFD23F'));P(13,0,'#E2611B');
+  }else if(name==='magnifier'){
+    for(let i=0;i<5;i++){P(9+i,10+i,'#6B4A2F');P(10+i,10+i,'#6B4A2F');P(9+i,11+i,'#5E3D22');P(11+i,10+i,K)}
+    circ(6.5,6.5,6.2,K);circ(6.5,6.5,5.2,'#BDBDBD');circ(6.5,6.5,4,'#9BE3FF');P(4,4,'#fff');P(5,4,'#fff');P(4,5,'#fff');
+  }else if(name==='camera'){
+    for(let y=3;y<=13;y++)for(let x=1;x<=14;x++)P(x,y,(y===3||y===13||x===1||x===14)?K:'#6B6B6B');
+    for(let y=1;y<=3;y++)for(let x=4;x<=8;x++)P(x,y,(y===1||x===4||x===8)?K:'#6B6B6B');
+    circ(8,8.5,3.8,K);circ(8,8.5,2.8,'#3D7DD8');P(7,7,'#9BE3FF');P(11,5,'#FFD23F');P(12,5,'#FFD23F');
+  }
+}
+// 블록 텍스처 (팀 재료)
+const BLOCKS = {
+  grass:{n:'잔디'},stone:{n:'돌'},oak:{n:'참나무'},sand:{n:'모래'},brick:{n:'벽돌'},snow:{n:'눈'},
+  gold:{n:'금광석'},diamond:{n:'다이아'},emerald:{n:'에메랄드'},lapis:{n:'청금석'},lava:{n:'용암'},ice:{n:'얼음'}
+};
+function hashStr(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return ((h>>>0)%2147483646)+1}
+function drawBlock(kind,g,face='side'){
+  let seed=hashStr(kind+face);const r=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+  const pick=a=>a[Math.floor(r()*a.length)];const P=(x,y,c)=>{g.fillStyle=c;g.fillRect(x,y,1,1)};
+  const DIRT=['#8B5E3C','#7A5233','#9C6B44','#6E4A2D','#A57449'],GR=['#5FAE36','#6CBF3F','#4F9A2C','#7ACB4C'];
+  const STONE=['#8E8E8E','#7F7F7F','#9C9C9C','#757575','#A7A7A7'];
+  const noise=pal=>{for(let y=0;y<16;y++)for(let x=0;x<16;x++)P(x,y,pick(pal))};
+  const ore=(c1,c2)=>{noise(STONE);[[2,3],[3,3],[3,4],[9,2],[10,2],[10,3],[5,9],[6,9],[6,10],[12,8],[12,9],[13,9],[3,13],[4,13],[10,13],[11,12],[11,13]].forEach(([x,y],i)=>P(x,y,i%3?c1:c2))};
+  if(kind==='grass'){
+    if(face==='top'){noise(GR);return}
+    if(face==='bottom'){noise(DIRT);return}
+    const edge=[4,5,4,3,4,6,5,4,3,4,5,4,3,5,6,4];noise(DIRT);for(let x=0;x<16;x++)for(let y=0;y<edge[x];y++)P(x,y,pick(GR));
+  }else if(kind==='stone')noise(STONE);
+  else if(kind==='oak'){for(let y=0;y<16;y++)for(let x=0;x<16;x++){const line=y%4===3;const seam=(y%8<4?x===5:x===12)&&!line;P(x,y,line||seam?'#6E4F2A':pick(['#B88B4A','#AE8243','#C29553','#A57A3D']))}}
+  else if(kind==='sand')noise(['#E8D9A0','#DCCB8C','#F0E2AE','#D6C483']);
+  else if(kind==='brick'){for(let y=0;y<16;y++)for(let x=0;x<16;x++){const line=y%4===3;const seam=(y%8<4?x%8===0:x%8===4)&&!line;P(x,y,line||seam?'#C9BFB5':pick(['#A8483A','#B6503F','#984034','#BC5A47']))}}
+  else if(kind==='snow')noise(['#FFFFFF','#F2F7FA','#E6EEF4','#FAFDFF']);
+  else if(kind==='gold')ore('#FCE65A','#D49A00');
+  else if(kind==='diamond')ore('#6FF0E6','#2AA6A0');
+  else if(kind==='emerald')ore('#4BE07A','#1E9A48');
+  else if(kind==='lapis')ore('#3D63D8','#20399A');
+  else if(kind==='lava')noise(['#FF8A1C','#F26A10','#FFB02E','#D94A0C','#FFC94A']);
+  else if(kind==='ice'){noise(['#9CC9FF','#8CBEF8','#A9D2FF','#B8DAFF']);for(let i=0;i<5;i++)P(3+i*2,10-i,'#EAF5FF')}
+  else noise(STONE);
+}
+const ICON_CACHE={};
+function iconURL(name){
+  if(ICON_CACHE[name])return ICON_CACHE[name];
+  const c=document.createElement('canvas');c.width=c.height=16;const g=c.getContext('2d');
+  if(name.startsWith('blk:')){const [,k,f]=name.split(':');drawBlock(k,g,f||'side')}
+  else if(name.startsWith('pick:')){
+    const tier={wood:['#B88B4A','#7A5A30'],stone:['#A7A7A7','#6E6E6E'],iron:['#F0F0F0','#B0B0B0'],gold:['#FCE65A','#D49A00'],diamond:['#6FF0E6','#2AA6A0']}[name.slice(5)];
+    const d=PIX.pick;d.m.forEach((row,y)=>[...row].forEach((ch,x)=>{if(ch==='.')return;g.fillStyle=ch==='h'?tier[0]:ch==='H'?tier[1]:d.p[ch];g.fillRect(x,y,1,1)}));
+  }
+  else if(PIX[name]){const d=PIX[name];d.m.forEach((row,y)=>[...row].forEach((ch,x)=>{if(ch==='.')return;g.fillStyle=d.p[ch];g.fillRect(x,y,1,1)}))}
+  else drawProcedural(name,g);
+  return ICON_CACHE[name]=c.toDataURL();
+}
+const ico=(name,size=24,style='')=>`<img class="px" src="${iconURL(name)}" width="${size}" height="${size}" alt="" style="${style}">`;
+const blockIco=(kind,size=28)=>ico('blk:'+(BLOCKS[kind]?kind:'grass'),size,'outline:2px solid #1B1B1B;outline-offset:-1px');
+function cubeHTML(kind='grass',size=96,still=false){
+  const side=iconURL('blk:'+kind),top=iconURL('blk:'+kind+(kind==='grass'?':top':'')),bot=iconURL('blk:'+kind+(kind==='grass'?':bottom':''));
+  const f=(c,u)=>`<i class="${c}" style="background-image:url(${u})"></i>`;
+  return `<div class="cube-wrap" style="height:${Math.round(size*1.7)}px"><div class="cube ${still?'still':''}" style="--s:${size}px">${f('ft',side)}${f('bk',side)}${f('rt',side)}${f('lf',side)}${f('tp',top)}${f('bt',bot)}</div></div>`;
+}
+
+/* =====================================================================
    🎭 모둠 역할 6가지
    ===================================================================== */
 const ROLES = {
-  captain:   {e:'🧭', name:'타임 선장',        job:'진행·시간 관리',     color:'#3DDC97',
+  captain:   {i:'compass',  name:'타임 선장',        job:'진행·시간 관리',     color:'#4E9A2F',
     type:'팀이 길을 잃지 않게 하는 길잡이 타입',
     traits:['시간과 순서를 잘 챙겨요','모두에게 말할 차례를 나눠줘요','마감 전에 팀을 끝까지 완주시켜요'],
     tasks:['시작할 때 오늘 할 일 순서 말하기','남은 시간 알려주기 (10분·5분 전)','아직 말 안 한 친구에게 차례 넘기기'],
     tip:'명령 말고 "다음은 누구 차례?" 한마디면 충분해요!'},
-  presenter: {e:'🎤', name:'무대 장인',        job:'발표',               color:'#FF6B6B',
+  presenter: {i:'megaphone',name:'무대 장인',        job:'발표',               color:'#D9483B',
     type:'말 한마디로 분위기를 바꾸는 무대 체질',
     traits:['사람들 앞에서도 비교적 침착해요','생각을 말로 풀어내는 게 자연스러워요','팀이 한 일을 빛나게 만들어요'],
     tasks:['발표 내용을 소리 내어 1번 연습하기','팀을 대표해 발표하기','질문이 오면 알맞은 팀원에게 연결하기'],
     tip:'완벽한 발표보다 "우리 팀이 한 일"을 또박또박 전하면 끝!'},
-  researcher:{e:'🔍', name:'자료 탐정',        job:'자료 조사·준비',     color:'#4D96FF',
+  researcher:{i:'magnifier',name:'자료 탐정',        job:'자료 조사·준비',     color:'#3D7DD8',
     type:'궁금하면 못 참는 탐구 본능',
     traits:['검색하고 조사하는 걸 잘해요','근거 있는 정보를 좋아해요','팀의 주장에 힘을 실어줘요'],
     tasks:['믿을 만한 자료 2개 찾기','출처(사이트·책 이름) 메모하기','찾은 자료를 팀에 1분 브리핑하기'],
     tip:'자료는 많을 필요 없어요. 믿을 만한 2개면 OK!'},
-  idea:      {e:'💡', name:'아이디어 연금술사', job:'아이디어 정리·기록', color:'#FFD23F',
+  idea:      {i:'torch',    name:'아이디어 연금술사', job:'아이디어 정리·기록', color:'#D99A00',
     type:'흩어진 생각을 한 줄로 꿰는 정리의 달인',
     traits:['친구 말을 잘 듣고 핵심을 찾아요','엉뚱한 생각끼리 연결하는 힘이 있어요','회의가 끝나면 정리가 남아요'],
     tasks:['팀원 의견을 빠짐없이 메모하기','비슷한 의견끼리 묶어 핵심 3줄 정리','최종 결정 사항을 팀에 읽어주기'],
     tip:'예쁜 글씨보다 빠짐없는 메모가 최고예요!'},
-  designer:  {e:'🎨', name:'금손 디자이너',    job:'시각화·결과물 제작', color:'#B98CF0',
+  designer:  {i:'brush',    name:'금손 디자이너',    job:'시각화·결과물 제작', color:'#8A4FC9',
     type:'눈에 보이게 만드는 금손',
     traits:['그림·색·배치 감각이 좋아요','복잡한 내용을 한눈에 보이게 해요','결과물의 첫인상을 책임져요'],
     tasks:['결과물 배치(레이아웃) 정하기','제목·그림·도표 꾸미기','팀원에게 그릴 부분 한 조각씩 나눠주기'],
     tip:'혼자 다 그리지 말고 팀원에게 한 조각씩 나눠줘요!'},
-  cheer:     {e:'🔋', name:'에너지 충전기',    job:'준비물·응원·마무리', color:'#FF8FAB',
+  cheer:     {i:'heart',    name:'에너지 충전기',    job:'준비물·응원·마무리', color:'#D6457F',
     type:'팀에 에너지를 채우는 분위기 메이커',
     traits:['리액션 하나로 팀 분위기를 살려요','눈치가 빠르고 친구를 편하게 해줘요','작지만 꼭 필요한 일을 챙겨요'],
     tasks:['준비물(펜·종이·태블릿) 챙겨오기','친구 의견에 리액션·칭찬 1번 이상','마지막 체크리스트 확인 & 뒷정리'],
     tip:'부담 NO! 준비물·리액션·체크리스트 3가지만 하면 우리 팀 MVP!'}
 };
 const ROLE_IDS = Object.keys(ROLES);
+const rIco=(r,size=24)=>ico((ROLES[r]||ROLES.cheer).i,size);
 
 /* =====================================================================
    ❓ 성향 테스트 8문항 (YES/NO 각각 점수가 들어가는 역할이 달라요)
    ===================================================================== */
 const QUESTIONS = [
-  {e:'🎙️', q:'친구들 앞에서 말할 때\n생각보다 별로 안 떨린다.',            y:{presenter:3,captain:1}, n:{researcher:1,designer:1,idea:1}},
-  {e:'🔎', q:'궁금한 게 생기면\n바로 검색창부터 연다.',                   y:{researcher:3},          n:{cheer:1,presenter:1}},
-  {e:'🖍️', q:'필기할 때 색깔 펜이나 그림으로\n꾸미는 게 은근 재밌다.',     y:{designer:3},            n:{captain:1,researcher:1}},
-  {e:'🌀', q:'대화가 산으로 가면\n"자, 정리하면~" 하고 싶어진다.',         y:{idea:3,captain:1},      n:{cheer:1,designer:1}},
-  {e:'⏰', q:'숙제 마감이나 약속 시간은\n미리미리 챙기는 편이다.',         y:{captain:3},             n:{idea:1,cheer:1}},
-  {e:'🛋️', q:'솔직히 모둠활동은\n조용히 따라가는 게 제일 편하다.',        y:{cheer:3},               n:{presenter:1,captain:1}},
-  {e:'👏', q:'친구가 뭘 잘하면\n"오 대박!" 리액션이 먼저 나온다.',         y:{cheer:2,presenter:1},   n:{researcher:1,idea:1}},
-  {e:'⚡', q:'엉뚱한 아이디어가\n갑자기 번뜩일 때가 많다.',                y:{idea:2,designer:1},     n:{researcher:1,captain:1}}
+  {i:'megaphone', q:'친구들 앞에서 말할 때\n생각보다 별로 안 떨린다.',            y:{presenter:3,captain:1}, n:{researcher:1,designer:1,idea:1}},
+  {i:'magnifier', q:'궁금한 게 생기면\n바로 검색창부터 연다.',                   y:{researcher:3},          n:{cheer:1,presenter:1}},
+  {i:'brush',     q:'필기할 때 색깔 펜이나 그림으로\n꾸미는 게 은근 재밌다.',     y:{designer:3},            n:{captain:1,researcher:1}},
+  {i:'bubble',    q:'대화가 산으로 가면\n"자, 정리하면~" 하고 싶어진다.',         y:{idea:3,captain:1},      n:{cheer:1,designer:1}},
+  {i:'clock',     q:'숙제 마감이나 약속 시간은\n미리미리 챙기는 편이다.',         y:{captain:3},             n:{idea:1,cheer:1}},
+  {i:'hourglass', q:'솔직히 모둠활동은\n조용히 따라가는 게 제일 편하다.',        y:{cheer:3},               n:{presenter:1,captain:1}},
+  {i:'heart',     q:'친구가 뭘 잘하면\n"오 대박!" 리액션이 먼저 나온다.',         y:{cheer:2,presenter:1},   n:{researcher:1,idea:1}},
+  {i:'torch',     q:'엉뚱한 아이디어가\n갑자기 번뜩일 때가 많다.',                y:{idea:2,designer:1},     n:{researcher:1,captain:1}}
 ];
-// 역할별 최대 가능 점수 (정규화용 → 문항 수가 다른 역할 간 공정성 보정)
 const MAXS = (()=>{const m={};ROLE_IDS.forEach(r=>m[r]=0);QUESTIONS.forEach(q=>ROLE_IDS.forEach(r=>m[r]+=Math.max(q.y[r]||0,q.n[r]||0)));return m})();
 
 /* =====================================================================
    🎯 협력 미션 12가지 (역할마다 할 일이 따로 있어 '모두'가 참여)
    ===================================================================== */
 const MISSIONS = [
-  {id:'m01',e:'🗣️',t:'모두의 목소리',d:'모든 팀원이 아이디어를 1개 이상 말하고, 하나도 빠짐없이 기록하기',
-    tasks:{captain:'돌아가며 말하는 순서 정하기',presenter:'첫 번째 아이디어로 분위기 열기',researcher:'아이디어를 뒷받침할 자료 1개 보태기',idea:'나온 아이디어 빠짐없이 메모하기',designer:'가장 좋은 아이디어를 그림 1컷으로',cheer:'아이디어마다 리액션 & 박수 👏'}},
-  {id:'m02',e:'⏱️',t:'3분 스피드 회의',d:'타이머 3분! 우리 팀 목표를 딱 한 문장으로 정하기',
-    tasks:{captain:'타이머 맞추고 1분마다 시간 알리기',presenter:'정한 목표 문장을 큰 소리로 읽기',researcher:'목표에 필요한 자료 1개 떠올리기',idea:'후보 문장 2~3개를 하나로 다듬기',designer:'목표 문장을 종이에 크게 쓰기',cheer:'시간 안에 끝내면 팀 하이파이브 주도 ✋'}},
-  {id:'m03',e:'🌟',t:'칭찬 릴레이',d:'활동하는 동안 팀원 모두가 서로를 "구체적으로" 1번씩 칭찬하기',
+  {id:'m01',i:'bubble',t:'모두의 목소리',d:'모든 팀원이 아이디어를 1개 이상 말하고, 하나도 빠짐없이 기록하기',
+    tasks:{captain:'돌아가며 말하는 순서 정하기',presenter:'첫 번째 아이디어로 분위기 열기',researcher:'아이디어를 뒷받침할 자료 1개 보태기',idea:'나온 아이디어 빠짐없이 메모하기',designer:'가장 좋은 아이디어를 그림 1컷으로',cheer:'아이디어마다 리액션 & 박수'}},
+  {id:'m02',i:'clock',t:'3분 스피드 회의',d:'타이머 3분! 우리 팀 목표를 딱 한 문장으로 정하기',
+    tasks:{captain:'타이머 맞추고 1분마다 시간 알리기',presenter:'정한 목표 문장을 큰 소리로 읽기',researcher:'목표에 필요한 자료 1개 떠올리기',idea:'후보 문장 2~3개를 하나로 다듬기',designer:'목표 문장을 종이에 크게 쓰기',cheer:'시간 안에 끝내면 팀 하이파이브 주도'}},
+  {id:'m03',i:'star',t:'칭찬 릴레이',d:'활동하는 동안 팀원 모두가 서로를 "구체적으로" 1번씩 칭찬하기',
     tasks:{captain:'왼쪽 친구 칭찬으로 릴레이 시작하기',presenter:'칭찬받은 점 하나를 발표 때 소개하기',researcher:'자료를 도와준 친구 칭찬하기',idea:'좋은 의견을 낸 친구 칭찬하기',designer:'꾸미기를 도와준 친구 칭찬하기',cheer:'칭찬 못 받은 친구가 없는지 체크하기'}},
-  {id:'m04',e:'🤫',t:'침묵의 포스트잇',d:'3분 동안 말하지 않고 포스트잇(쪽지)으로만 의견 나누기',
+  {id:'m04',i:'paper',t:'침묵의 포스트잇',d:'3분 동안 말하지 않고 포스트잇(쪽지)으로만 의견 나누기',
     tasks:{captain:'3분 타이머 & 침묵 시작 신호 주기',presenter:'포스트잇 중 베스트 1개 골라 읽기',researcher:'자료 내용을 포스트잇 1장에 요약',idea:'포스트잇을 비슷한 것끼리 묶기',designer:'묶은 포스트잇에 제목 붙이기',cheer:'포스트잇·펜 나눠주기'}},
-  {id:'m05',e:'🖐️',t:'손길 도장',d:'결과물에 모든 팀원의 글씨나 그림이 1개 이상 들어가게 하기',
+  {id:'m05',i:'brush',t:'손길 도장',d:'결과물에 모든 팀원의 글씨나 그림이 1개 이상 들어가게 하기',
     tasks:{captain:'누가 어디를 맡을지 나누기',presenter:'제목 글씨 쓰기',researcher:'자료·출처 부분 쓰기',idea:'핵심 문장 쓰기',designer:'그림·도표 그리기',cheer:'빈칸이 없는지 체크 & 색칠 돕기'}},
-  {id:'m06',e:'💣',t:'질문 폭탄',d:'팀원 모두 우리 결과물에 대한 질문을 1개씩 만들고 서로 답해보기',
+  {id:'m06',i:'bomb',t:'질문 폭탄',d:'팀원 모두 우리 결과물에 대한 질문을 1개씩 만들고 서로 답해보기',
     tasks:{captain:'질문-답 순서 진행하기',presenter:'제일 어려운 질문에 답해보기',researcher:'답에 필요한 자료 찾아주기',idea:'질문과 답을 기록하기',designer:'헷갈리는 부분을 그림으로 설명하기',cheer:'"좋은 질문!" 리액션 담당'}},
-  {id:'m07',e:'🎬',t:'리허설 타임',d:'발표 전에 팀 안에서 연습 발표를 하고, 고칠 점 1개씩 말해주기',
+  {id:'m07',i:'megaphone',t:'리허설 타임',d:'발표 전에 팀 안에서 연습 발표를 하고, 고칠 점 1개씩 말해주기',
     tasks:{captain:'리허설 시간 재기',presenter:'팀 앞에서 연습 발표하기',researcher:'자료가 정확한지 확인하기',idea:'피드백 내용 정리하기',designer:'결과물에서 안 보이는 부분 고치기',cheer:'잘한 점부터 먼저 말해주기'}},
-  {id:'m08',e:'🔄',t:'역할 체인지 1분',d:'1분 동안 옆 친구의 역할을 대신 도와주고 원래 역할로 돌아오기',
+  {id:'m08',i:'arrows',t:'역할 체인지 1분',d:'1분 동안 옆 친구의 역할을 대신 도와주고 원래 역할로 돌아오기',
     tasks:{captain:'1분 시작·끝 신호 주기',presenter:'디자이너 일 1분 돕기',researcher:'정리 담당 일 1분 돕기',idea:'자료 탐정 일 1분 돕기',designer:'발표 연습 1분 들어주기',cheer:'선장 대신 남은 시간 알려주기'}},
-  {id:'m09',e:'✍️',t:'핵심 한 줄',d:'각자 오늘 활동을 한 줄로 요약하고, 팀 베스트 한 줄을 투표로 고르기',
+  {id:'m09',i:'paper',t:'핵심 한 줄',d:'각자 오늘 활동을 한 줄로 요약하고, 팀 베스트 한 줄을 투표로 고르기',
     tasks:{captain:'투표 진행하기',presenter:'베스트 한 줄을 발표에 넣기',researcher:'한 줄에 숫자·사실 1개 넣어보기',idea:'모두의 한 줄 모아 적기',designer:'베스트 한 줄을 결과물에 크게 쓰기',cheer:'내 한 줄 쓰고 투표 독려하기'}},
-  {id:'m10',e:'🤝',t:'둘 다 살리기',d:'의견이 갈리면 다수결 대신 두 의견을 합치는 방법 찾기',
+  {id:'m10',i:'heart',t:'둘 다 살리기',d:'의견이 갈리면 다수결 대신 두 의견을 합치는 방법 찾기',
     tasks:{captain:'두 의견을 각각 30초씩 듣게 하기',presenter:'합친 결론을 팀에 다시 말해주기',researcher:'각 의견의 근거 자료 확인하기',idea:'두 의견의 공통점 찾아 적기',designer:'합친 아이디어를 그림으로 표현',cheer:'분위기 풀어주는 한마디 하기'}},
-  {id:'m11',e:'📸',t:'협력 인증샷',d:'모든 팀원의 손이 결과물에 닿아 있는 인증샷 찍기',
-    tasks:{captain:'촬영 타이밍 정하기',presenter:'인증샷 포즈 아이디어 내기',researcher:'결과물 핵심 부분이 보이게 위치 잡기',idea:'인증샷 제목 한 줄 짓기',designer:'구도·배치 잡기',cheer:'사진 찍기 담당 📷'}},
-  {id:'m12',e:'🦸',t:'0명 소외 작전',d:'지금까지 말을 가장 적게 한 친구의 의견을 결과물에 꼭 반영하기',
+  {id:'m11',i:'camera',t:'협력 인증샷',d:'모든 팀원의 손이 결과물에 닿아 있는 인증샷 찍기',
+    tasks:{captain:'촬영 타이밍 정하기',presenter:'인증샷 포즈 아이디어 내기',researcher:'결과물 핵심 부분이 보이게 위치 잡기',idea:'인증샷 제목 한 줄 짓기',designer:'구도·배치 잡기',cheer:'사진 찍기 담당'}},
+  {id:'m12',i:'shield',t:'0명 소외 작전',d:'지금까지 말을 가장 적게 한 친구의 의견을 결과물에 꼭 반영하기',
     tasks:{captain:'모두에게 한 번씩 의견 묻기',presenter:'반영된 의견을 발표에 소개하기',researcher:'그 의견에 맞는 자료 찾아주기',idea:'그 의견을 정리해 적기',designer:'그 의견을 결과물에 표시하기',cheer:'의견 낸 친구에게 박수 유도하기'}}
 ];
 const MISSION_BY_ID = Object.fromEntries(MISSIONS.map(m=>[m.id,m]));
 
-/* 팀 레벨 & 팀 이름 */
+/* 팀 레벨(곡괭이 등급) & 팀 블록 */
 const LEVELS = [
-  {min:0,e:'🪵',n:'나무 등급 팀'},{min:1,e:'🪨',n:'돌 등급 팀'},{min:2,e:'⛓️',n:'철 등급 팀'},
-  {min:3,e:'🥇',n:'금 등급 팀'},{min:5,e:'💎',n:'다이아 등급 팀'}
+  {min:0,i:'pick:wood',n:'나무 등급'},{min:1,i:'pick:stone',n:'돌 등급'},{min:2,i:'pick:iron',n:'철 등급'},
+  {min:3,i:'pick:gold',n:'금 등급'},{min:5,i:'pick:diamond',n:'다이아 등급'}
 ];
-const TEAM_ANIMALS = [['🦊','여우'],['🐯','호랑이'],['🐬','돌고래'],['🦉','부엉이'],['🐺','늑대'],['🐼','판다'],['🦁','사자'],['🐧','펭귄'],['🦄','유니콘'],['🐙','문어'],['🐢','거북'],['🦖','공룡']];
+const BLOCK_IDS = Object.keys(BLOCKS);
+const teamBlock = t=>BLOCKS[t&&t.blk]?t.blk:'grass';
 
 /* =====================================================================
    🧰 유틸
@@ -349,7 +531,7 @@ const LS = {get(k,d=null){try{const v=store().getItem(k);return v==null?d:JSON.p
 const ME={get:()=>LS.get('tm_me'),set:v=>LS.set('tm_me',v),del:()=>LS.del('tm_me')};
 let toastTimer;
 function toast(msg,ms=2200){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),ms)}
-function confetti(n=70){const col=['#5DA03A','#8B5A2B','#4FC3E8','#FCDB4A','#B3312C','#7B3FC0','#E0E0E0'];for(let i=0;i<n;i++){const s=document.createElement('div');s.className='confetti';s.style.background=col[i%col.length];
+function confetti(n=70){const col=['#5FAE36','#8B5E3C','#6FF0E6','#FCE65A','#D9483B','#3D63D8','#E6E6E6','#4BE07A'];for(let i=0;i<n;i++){const s=document.createElement('div');s.className='confetti';s.style.background=col[i%col.length];
   s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.8)+'s';s.style.animationDelay=(Math.random()*.6)+'s';const z=10+Math.floor(Math.random()*3)*4;s.style.width=s.style.height=z+'px';
   document.body.appendChild(s);setTimeout(()=>s.remove(),4200)}}
 function overlay(html){const o=$('#overlay');o.innerHTML=html;o.classList.add('show');return o}
@@ -358,9 +540,10 @@ function loadScript(src){return new Promise((res,rej)=>{const s=document.createE
 function getAt(o,path){if(!path)return o;for(const k of path.split('/')){if(o==null)return null;o=o[k]}return o===undefined?null:o}
 function setAt(o,path,val){const ks=path.split('/');let cur=o;for(let i=0;i<ks.length-1;i++){if(typeof cur[ks[i]]!=='object'||cur[ks[i]]===null)cur[ks[i]]={};cur=cur[ks[i]]}
   const last=ks[ks.length-1];if(val===null||val===undefined)delete cur[last];else cur[last]=clone(val)}
-const roleTag = (r,extra='')=>{const R=ROLES[r];return R?`<span class="pill" style="background:${R.color}">${R.e} ${R.name}${extra}</span>`:''};
+const roleTag = r=>{const R=ROLES[r];return R?`<span class="rtag" style="background:${R.color}">${ico(R.i,20)}${R.name}</span>`:''};
 const levelOf = stars=>{let L=LEVELS[0];LEVELS.forEach(l=>{if(stars>=l.min)L=l});const i=LEVELS.indexOf(L);const next=LEVELS[i+1];return {...L,next,idx:i}};
 const sortStudents = arr=>arr.sort((a,b)=>(a.num||0)-(b.num||0));
+const STAR=(s=18)=>ico('star',s);
 
 /* =====================================================================
    🔌 DB 계층 — Firebase Realtime Database 또는 데모(localStorage)
@@ -394,7 +577,7 @@ const DB = {
   set(path,val){if(!this.demo)return this.ref(path).set(val);const d=this._read();setAt(d,path,val);this._write(d);return Promise.resolve()},
   update(path,obj){if(!this.demo)return this.ref(path).update(obj);const d=this._read();for(const [k,v] of Object.entries(obj))setAt(d,path?path+'/'+k:k,v);this._write(d);return Promise.resolve()}
 };
-function demoBar(){return DB.demo?`<div class="demo-bar">🧪 <b>데모 모드</b> · 같은 브라우저의 탭끼리만 연결돼요. 실제 수업은 Firebase 설정이 필요해요 (README 참고)</div>`:''}
+function demoBar(){return DB.demo?`<div class="demo-bar"><b>데모 모드</b> · 같은 브라우저의 탭끼리만 연결돼요. 실제 수업은 Firebase 설정이 필요해요 (README 참고)</div>`:''}
 
 /* =====================================================================
    🧮 점수 · 팀 편성 알고리즘
@@ -434,31 +617,25 @@ function buildTeams(students,count){
     shuffle(teams).forEach(t=>{const k=[t.list.length,t.rc[r]||0];if(!best||k[0]<bk[0]||(k[0]===bk[0]&&k[1]<bk[1])){best=t;bk=k}});
     best.list.push(s);best.rc[r]=(best.rc[r]||0)+1;
   }
-  const names=shuffle(TEAM_ANIMALS);
+  const kinds=shuffle(BLOCK_IDS);
   const out={};
-  teams.forEach((t,i)=>{const [e,n]=names[i%names.length];out['t'+(i+1)]={no:i+1,e,name:`${n} 원정대`,members:assignRoles(t.list)}});
+  teams.forEach((t,i)=>{const blk=kinds[i%kinds.length];out['t'+(i+1)]={no:i+1,blk,name:`${BLOCKS[blk].n} 원정대`,members:assignRoles(t.list)}});
   return out;
 }
 
 /* =====================================================================
-   🚦 라우터
+   🚦 라우터 & 배경
    ===================================================================== */
-function makeTextures(){
-  const tex=(draw)=>{const c=document.createElement('canvas');c.width=c.height=16;const g=c.getContext('2d');let seed=7;
-    const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
-    for(let y=0;y<16;y++)for(let x=0;x<16;x++){g.fillStyle=draw(x,y,rnd);g.fillRect(x,y,1,1)}return `url(${c.toDataURL()})`};
-  const pick=(a,r)=>a[Math.floor(r()*a.length)];
-  const dirt=['#6B4A2F','#5B3E2B','#7A5636','#4E3422','#8A643F'];
-  const grass=['#5DA03A','#6CB244','#4E8F2E','#79BF4D'];
-  const stone=['#7F7F7F','#747474','#8C8C8C','#6A6A6A','#999999'];
+function makeBackground(){
   const root=document.documentElement.style;
-  root.setProperty('--tex-dirt',tex((x,y,r)=>pick(dirt,r)));
-  const edge=[3,4,3,2,3,4,5,4,3,3,2,3,4,4,3,2];
-  root.setProperty('--tex-grass',tex((x,y,r)=>y<edge[x]?pick(grass,r):pick(dirt,r)));
-  root.setProperty('--tex-stone',tex((x,y,r)=>pick(stone,r)));
+  root.setProperty('--tex-grass-top',`url(${iconURL('blk:grass:top')})`);
+  root.setProperty('--tex-grass-side',`url(${iconURL('blk:grass')})`);
+  root.setProperty('--tex-stone',`url(${iconURL('blk:stone')})`);
+  $('#sky').innerHTML=[[8,140,46],[22,220,70],[38,110,55],[60,180,90],[14,260,62]].map(([top,w,dur],i)=>
+    `<div class="cloud" style="top:${top}%;width:${w}px;animation-duration:${dur}s;animation-delay:-${i*13}s"></div>`).join('');
 }
 async function boot(){
-  makeTextures();
+  makeBackground();
   await DB.init();
   window.addEventListener('hashchange',route);
   route();
@@ -472,17 +649,17 @@ function route(){
   landing();
 }
 function landing(){
-  app.innerHTML=`${demoBar()}<div class="wrap" style="display:flex;flex-direction:column;justify-content:center;min-height:90vh">
-    <div class="center pop" style="margin-bottom:22px">
-      <span class="hero-emoji">🧱</span>
-      <h1 class="mc-title" style="margin-top:12px">팀워크 메이커</h1>
-      <span class="mc-sub">모두가 한 블록씩!</span>
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky" style="display:flex;flex-direction:column;justify-content:center;min-height:82vh">
+    <div class="center pop">
+      ${cubeHTML('grass',92)}
+      <h1 class="mc-title">팀워크 메이커</h1>
+      <span class="splash">모두가 한 블록씩!</span>
     </div>
-    <div class="card grass-top center pop" style="padding:28px 22px">
-      <p style="line-height:1.7">나의 모둠 역할 성향을 찾고<br>우리 팀과 협력 미션을 깨자!</p>
-      <div class="stack" style="margin-top:20px">
-        <button class="btn big yellow" onclick="location.hash='#join'">🙋 학생으로 시작하기</button>
-        <button class="btn big" onclick="location.hash='#admin'">🧑‍🏫 선생님 입장</button>
+    <div class="card grass center pop" style="margin-top:24px">
+      <p style="font-size:17px;font-weight:700;line-height:1.7">나의 모둠 역할 성향을 찾고<br>우리 팀과 협력 미션을 깨자!</p>
+      <div class="stack" style="margin-top:18px">
+        <button class="btn big green" onclick="location.hash='#join'">${ico('pick:diamond',26)} 학생으로 시작하기</button>
+        <button class="btn big" onclick="location.hash='#admin'">${ico('lock',24)} 선생님 입장</button>
       </div>
     </div>
     <div class="legend" style="justify-content:center;margin-top:18px">${ROLE_IDS.map(r=>roleTag(r)).join('')}</div>
@@ -498,18 +675,18 @@ function cleanupStudent(){S.unsub&&S.unsub();S.unsubList&&S.unsubList();S.unsub=
 function studentEntry(){
   const me=ME.get();
   if(me&&me.room&&me.sid){S.room=me.room;S.sid=me.sid;return subscribeStudent()}
-  app.innerHTML=`${demoBar()}<div class="wrap">
-    <div class="center" style="margin:10px 0 18px"><span class="hero-emoji">🙋</span><h1 style="margin-top:8px">입장하기</h1>
-      <p class="muted" style="font-weight:700;margin-top:6px">8개의 YES/NO 질문으로<br>나의 모둠 역할 성향을 찾아봐요!</p></div>
-    <div class="card grass-top pop">
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky">
+    <div class="card grass pop">
+      <div class="row" style="flex-wrap:nowrap;gap:14px;margin-bottom:16px"><span class="slotbg" style="padding:6px;display:flex">${ico('person',52)}</span>
+        <div><h2>입장하기</h2><p class="sub">8개의 YES/NO 질문으로 나의 모둠 역할 성향을 찾아봐요!</p></div></div>
       <div class="field"><label>우리 반</label><select id="sRoom" class="input"><option value="">불러오는 중…</option></select></div>
       <div class="row" style="align-items:flex-start">
         <div class="field" style="width:110px"><label>번호</label><input id="sNum" class="input" type="number" inputmode="numeric" min="1" max="99" placeholder="7"></div>
         <div class="field grow"><label>이름</label><input id="sName" class="input" maxlength="10" placeholder="홍길동"></div>
       </div>
-      <button class="btn big yellow" id="sGo">성향 테스트 시작 🚀</button>
+      <button class="btn big green" id="sGo">${ico('pick:diamond',24)} 성향 테스트 시작</button>
     </div>
-    <div class="center" style="margin-top:14px"><button class="btn ghost" onclick="location.hash='';ME.del();landing()">← 처음으로</button></div>
+    <div class="center" style="margin-top:12px"><button class="btn ghost" onclick="location.hash='';ME.del();landing()">← 처음으로</button></div>
   </div>`;
   S.unsubList=DB.on('roomList',list=>{
     const sel=$('#sRoom');if(!sel)return;
@@ -527,8 +704,7 @@ function studentEntry(){
     const sid='n'+String(num).padStart(2,'0');
     const ex=await DB.get(`rooms/${room}/students/${sid}`);
     if(ex&&ex.name!==name&&!confirm(`${num}번은 이미 "${ex.name}" 학생이 입장했어요.\n내가 ${num}번 ${name}이(가) 맞나요? (기존 기록을 덮어써요)`))return;
-    if(ex&&ex.name===name){ /* 같은 학생 재입장 → 기록 유지 */ }
-    else await DB.set(`rooms/${room}/students/${sid}`,{num,name,status:'testing',joinedAt:Date.now()});
+    if(!(ex&&ex.name===name))await DB.set(`rooms/${room}/students/${sid}`,{num,name,status:'testing',joinedAt:Date.now()});
     ME.set({room,sid});S.room=room;S.sid=sid;
     S.unsubList&&S.unsubList();S.unsubList=null;
     subscribeStudent();
@@ -551,7 +727,6 @@ function renderStudent(){
     if(S.sig!==sig){S.view='result';S.sig=sig;renderResult(st)}
     return;
   }
-  // 공개 상태
   const seenKey=`tm_seenReveal_${S.room}`;
   if(S.view!=='team'&&LS.get(seenKey)!==d.revealAt){
     S.view='team';S.busy=true;LS.set(seenKey,d.revealAt);
@@ -568,12 +743,12 @@ function startQuiz(st){
   drawQuestion();
 }
 function quizIntro(st){
-  app.innerHTML=`${demoBar()}<div class="wrap"><div class="card center pop" style="padding:30px 20px">
-    <span class="hero-emoji">🔮</span>
-    <h2 style="margin-top:10px">${esc(st.name)}의 모둠 역할 성향 테스트</h2>
-    <p class="muted" style="font-weight:700;margin:10px 0 4px;line-height:1.6">질문 8개에 <b style="color:var(--ink)">YES / NO</b>로만 답하면 끝!<br>정답은 없어요. 솔직할수록 잘 맞아요 😉</p>
-    <div class="legend" style="justify-content:center;margin:16px 0">${ROLE_IDS.map(r=>`<span class="pill" style="background:${ROLES[r].color}">${ROLES[r].e}</span>`).join('')}</div>
-    <button class="btn big yellow" id="qStart">START ▶</button>
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky"><div class="card grass center pop">
+    ${cubeHTML('diamond',70)}
+    <h2>${esc(st.name)}의<br>모둠 역할 성향 테스트</h2>
+    <p class="sub" style="margin:10px 0 4px;font-size:16.5px">질문 8개에 <b style="color:var(--text)">YES / NO</b>로만 답하면 끝!<br>정답은 없어요. 솔직할수록 잘 맞아요.</p>
+    <div class="row" style="justify-content:center;margin:16px 0;gap:8px">${ROLE_IDS.map(r=>`<span class="slotbg" style="padding:6px;display:inline-flex">${rIco(r,32)}</span>`).join('')}</div>
+    <button class="btn big green" id="qStart">START ▶</button>
     <button class="btn ghost" style="margin-top:10px" id="qOut">다른 이름으로 입장</button>
   </div></div>`;
   $('#qStart').onclick=drawQuestion;
@@ -581,13 +756,13 @@ function quizIntro(st){
 }
 function drawQuestion(){
   const i=S.qi,Q=QUESTIONS[i];
-  app.innerHTML=`${demoBar()}<div class="wrap">
-    <div class="qtop"><button class="btn sm" id="qBack" ${i===0?'disabled':''}>← 이전</button>
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky">
+    <div class="qtop"><button class="btn sm light" id="qBack" ${i===0?'disabled':''}>← 이전</button>
       <div class="dots">${QUESTIONS.map((_,k)=>`<i class="${k<i?'on':''} ${k===i?'cur':''}"></i>`).join('')}</div>
       <span class="pill">${i+1} / ${QUESTIONS.length}</span></div>
     <div class="card qcard slide">
       <span class="qnum">QUESTION ${i+1}</span>
-      <div class="qemoji">${Q.e}</div>
+      <div class="qicon slotbg">${ico(Q.i,88)}</div>
       <div class="qtext">${esc(Q.q)}</div>
     </div>
     <div class="yn">
@@ -604,7 +779,8 @@ function drawQuestion(){
 function saveQuiz(){LS.set(`tm_quiz_${S.room}_${S.sid}`,S.ans)}
 async function finishQuiz(){
   S.busy=true;
-  app.innerHTML=`${demoBar()}<div class="wrap"><div class="card analyzing pop"><div class="spinner"></div><h2>성향 분석 중…</h2><p class="muted" style="font-weight:700;margin-top:6px">나에게 딱 맞는 역할을 찾고 있어요 🔍</p></div></div>`;
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky"><div class="card grass analyzing pop">${cubeHTML('stone',64)}<h2>성향 분석 중…</h2>
+    <p class="sub" style="margin-top:6px">나에게 딱 맞는 역할 블록을 캐는 중이에요</p></div></div>`;
   const {raw,norm,role}=scoreAnswers(S.ans);
   await sleep(1700);
   await DB.update(`rooms/${S.room}/students/${S.sid}`,{status:'done',answers:S.ans,raw,norm,role,doneAt:Date.now()});
@@ -625,38 +801,38 @@ function roleCardHTML(r,{title='나의 모둠 역할 성향은',bars=null}={}){
   return `<div class="card rolecard pop">
     <div class="band" style="background:${R.color}"></div>
     <div class="inner">
-      <div class="role-emoji">${R.e}</div>
-      <div class="muted" style="font-weight:800;margin-top:12px">${title}</div>
+      <div class="role-icon slotbg">${ico(R.i,84)}</div>
+      <div class="sub" style="margin-top:12px">${title}</div>
       <div class="role-name">${R.name}</div>
-      <span class="pill role-job">${R.job}</span>
-      <p style="font-weight:800;margin-top:12px">"${R.type}"</p>
-      <div class="traits">${R.traits.map(t=>`<div>✔ ${t}</div>`).join('')}</div>
-      ${bars?`<div style="text-align:left;margin-top:18px"><h3>📊 나의 성향 그래프</h3><div class="bars">${bars}</div></div>`:''}
-      <div class="tip">💬 ${R.tip}</div>
+      <span class="pill" style="margin-top:6px">${R.job}</span>
+      <p style="font-weight:800;font-size:17px;margin-top:12px">"${R.type}"</p>
+      <div class="traits">${R.traits.map(t=>`<div>${ico('check',18)}${t}</div>`).join('')}</div>
+      ${bars?`<div style="text-align:left;margin-top:18px"><h3>나의 성향 그래프</h3><div class="bars">${bars}</div></div>`:''}
+      <div class="tip">${ico('bubble',22)}<span>${R.tip}</span></div>
     </div></div>`;
 }
 function barsHTML(norm){
   return ROLE_IDS.slice().sort((a,b)=>(norm[b]||0)-(norm[a]||0)).map(r=>{const p=Math.round((norm[r]||0)*100);
-    return `<div class="bar"><span>${ROLES[r].e} ${ROLES[r].name}</span><div class="track"><div class="fill" style="width:${p}%;background:${ROLES[r].color}"></div></div><span>${p}</span></div>`}).join('');
+    return `<div class="bar"><span>${rIco(r,20)}${ROLES[r].name}</span><div class="track"><div class="fill" style="width:${p}%;background:${ROLES[r].color}"></div></div><span>${p}</span></div>`}).join('');
 }
 function renderResult(st){
-  app.innerHTML=`${demoBar()}<div class="wrap stack">
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky stack">
     ${roleCardHTML(st.role,{bars:barsHTML(st.norm||{})})}
-    <div class="card"><h3>📝 이 역할이 하는 일 (딱 3가지!)</h3>
+    <div class="card"><h3 class="ico-h">${ico('paper',22)}이 역할이 하는 일 (딱 3가지!)</h3>
       <div class="tasklist">${ROLES[st.role].tasks.map((t,i)=>`<div><b>${i+1}</b>${t}</div>`).join('')}</div></div>
     <div class="card dark">
-      <div class="waiting">⏳ <span>선생님이 팀을 공개할 때까지 기다려요<span class="dotdot"><span>.</span><span>.</span><span>.</span></span></span></div>
-      <p style="font-size:14px;opacity:.8;margin-top:8px;font-weight:600">성향이 비슷한 친구끼리 몰리지 않게 골고루 팀이 짜여요. 팀 안에서 역할이 겹치면 두 번째로 잘 맞는 역할을 맡을 수도 있어요!</p>
+      <div class="waiting">${ico('hourglass',28)}<span>선생님이 팀을 공개할 때까지 기다려요<span class="dotdot"><span>.</span><span>.</span><span>.</span></span></span></div>
+      <p class="sub" style="font-size:15px;margin-top:8px">성향이 비슷한 친구끼리 몰리지 않게 골고루 팀이 짜여요. 팀 안에서 역할이 겹치면 두 번째로 잘 맞는 역할을 맡을 수도 있어요!</p>
     </div>
-    <div class="row" style="justify-content:center"><button class="btn sm" onclick="retakeQuiz()">🔁 테스트 다시 하기</button>
+    <div class="row center" style="justify-content:center"><button class="btn sm light" onclick="retakeQuiz()">테스트 다시 하기</button>
       <button class="btn ghost" onclick="studentLogout()">다른 이름으로 입장</button></div>
   </div>`;
 }
 
 /* --- 팀 공개 연출 --- */
 async function countdown(done){
-  for(const n of ['3','2','1']){overlay(`<div class="count" key="${n}">${n}</div>`);await sleep(750)}
-  overlay(`<div class="count" style="font-size:72px;text-align:center;line-height:1.2">우리 팀<br>공개! 🎉</div>`);
+  for(const n of ['3','2','1']){overlay(`<div class="count">${n}</div>`);await sleep(750)}
+  overlay(`<div class="count" style="font-size:64px;text-align:center;line-height:1.25">우리 팀<br>공개!</div>`);
   await sleep(900);closeOverlay();confetti(90);done();
 }
 
@@ -673,20 +849,21 @@ function teamProgress(d,tid,team){
   return {stars:cleared+bonus,cleared,bonus,cur,curDone,total:mem.length,mem};
 }
 function classStars(d){let t=0;for(const tid in (d.teams||{}))t+=teamProgress(d,tid,d.teams[tid]).stars;return t}
-function goalHTML(d){
+function goalInner(d){
   const goal=d.goal||10,have=classStars(d),p=Math.min(100,Math.round(have/goal*100));
-  return `<div class="card"><div class="goalbox"><div class="gift">${have>=goal?'🎁':'🎯'}</div><div class="grow">
-    <h3>우리 반 공동 목표 ${have>=goal?'— 달성! 🎉':''}</h3>
-    <p class="note" style="margin:2px 0 8px">모든 팀의 ⭐을 합쳐 ${goal}개를 모으면 우리 반 보상 해금!</p>
-    <div class="gauge blue"><div class="fill" style="width:${p}%"></div><div class="lbl">⭐ ${have} / ${goal}</div></div></div></div></div>`;
+  return `<div class="goalbox"><div class="slotbg" style="padding:6px;display:flex">${ico('chest',44)}</div><div class="grow">
+    <h3>우리 반 공동 목표 ${have>=goal?'— 달성!':''}</h3>
+    <p class="note" style="margin:2px 0 8px">모든 팀의 별을 합쳐 ${goal}개를 모으면 우리 반 보상 상자 열림!</p>
+    <div class="gauge blue"><div class="fill" style="width:${p}%"></div><div class="lbl">${STAR(14)} ${have} / ${goal}</div></div></div></div>`;
 }
+const goalHTML=d=>`<div class="card">${goalInner(d)}</div>`;
 function renderTeam(first){
   const d=S.data;const [tid,team]=myTeam(d);
   const st=d.students[S.sid];
   if(!team){
-    app.innerHTML=`${demoBar()}<div class="wrap stack"><div class="card center pop" style="padding:30px">
-      <span class="hero-emoji">🙈</span><h2 style="margin-top:10px">아직 팀이 없어요</h2>
-      <p class="muted" style="font-weight:700;margin-top:8px">선생님께 팀 배정을 요청해 주세요!</p></div>
+    app.innerHTML=`${demoBar()}<div class="wrap on-sky stack"><div class="card grass center pop">
+      ${cubeHTML('stone',60)}<h2>아직 팀이 없어요</h2>
+      <p class="sub" style="margin-top:8px">선생님께 팀 배정을 요청해 주세요!</p></div>
       ${roleCardHTML(st.role)}</div>`;
     return;
   }
@@ -700,51 +877,50 @@ function renderTeam(first){
   const curPct=P.total?Math.round(P.curDone/P.total*100):0;
   const lvPct=L.next?Math.round((P.stars-L.min)/(L.next.min-L.min)*100):100;
 
-  // 새 미션 슬롯 연출
   const seenMKey=`tm_seenMission_${S.room}_${tid}`;
   if(P.cur&&LS.get(seenMKey)!==P.cur.rid&&!S.busy){
     LS.set(seenMKey,P.cur.rid);S.busy=true;
     return studentSlot(M,()=>{S.busy=false;renderTeam(false)});
   }
-  // 미션 클리어 축하
   const clrKey=`tm_cleared_${S.room}_${tid}_${P.cur&&P.cur.rid}`;
-  if(P.cur&&P.total&&P.curDone===P.total&&!LS.get(clrKey)){LS.set(clrKey,1);setTimeout(()=>{confetti(80);toast('🎉 미션 클리어! 팀 ⭐ +1',3000)},300)}
+  if(P.cur&&P.total&&P.curDone===P.total&&!LS.get(clrKey)){LS.set(clrKey,1);setTimeout(()=>{confetti(80);toast('미션 클리어! 팀 별 +1',3000)},300)}
 
   const changed=st.role&&st.role!==myRole;
-  app.innerHTML=`${demoBar()}<div class="wrap stack">
-    <div class="card grass-top teambanner ${first?'pop':''}" style="background:linear-gradient(180deg,${R.color} 0 34%,var(--panel) 34%)">
-      <div style="font-size:54px;line-height:1">${team.e}</div>
-      <div class="muted" style="font-weight:800;margin-top:6px">${team.no}모둠</div>
+  const blk=teamBlock(team);
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky stack">
+    <div class="card grass teambanner ${first?'pop':''}">
+      ${cubeHTML(blk,72)}
+      <span class="pill">${team.no}모둠</span>
       <div class="tname">${esc(team.name)}</div>
-      <div class="level"><div class="mon">${L.e}</div><div class="grow">
-        <div class="row between"><b>Lv.${L.idx+1} ${L.n}</b><span class="pill">⭐ ${P.stars}</span></div>
-        <div class="gauge" style="margin-top:6px"><div class="fill" style="width:${lvPct}%"></div><div class="lbl">${L.next?`다음 진화까지 ⭐ ${L.next.min-P.stars}`:'최고 레벨 달성!'}</div></div>
+      <div class="level"><div class="mon slotbg">${ico(L.i,52)}</div><div class="grow">
+        <div class="row between"><b style="font-size:17px">Lv.${L.idx+1} ${L.n}</b><span class="pill">${STAR(16)} ${P.stars}</span></div>
+        <div class="gauge" style="margin-top:6px"><div class="fill" style="width:${lvPct}%"></div><div class="lbl">${L.next?`다음 등급까지 별 ${L.next.min-P.stars}개`:'최고 등급 달성!'}</div></div>
       </div></div>
     </div>
 
-    <div class="card"><div class="row between"><h3>🙋 나의 팀 역할</h3>${roleTag(myRole)}</div>
-      ${changed?`<p class="note" style="margin-top:6px">내 성향 1순위는 ${ROLES[st.role].e} ${ROLES[st.role].name}! 팀 밸런스를 위해 ${R.name}를 맡았어요. 새로운 능력 개발 찬스 💪</p>`:''}
+    <div class="card"><div class="row between"><h3>나의 팀 역할</h3>${roleTag(myRole)}</div>
+      ${changed?`<p class="note" style="margin-top:6px">내 성향 1순위는 ${ROLES[st.role].name}! 팀 밸런스를 위해 ${R.name}를 맡았어요. 새로운 능력을 키울 기회예요.</p>`:''}
       <div class="tasklist">${R.tasks.map((t,i)=>`<div><b>${i+1}</b>${t}</div>`).join('')}</div>
-      <div class="tip">💬 ${R.tip}</div></div>
+      <div class="tip">${ico('bubble',22)}<span>${R.tip}</span></div></div>
 
     ${M?`<div class="card mission">
-      <div class="mhead"><div class="me">${M.e}</div><div><div style="font-size:12px;font-weight:900;opacity:.75;letter-spacing:1px">COOP MISSION</div><div style="font-size:21px;font-weight:900">${M.t}</div></div></div>
+      <div class="mhead">${ico(M.i,44)}<div><div class="kicker">COOP MISSION</div><div class="ttl">${M.t}</div></div></div>
       <div class="mbody">
-        <p style="font-weight:800">${M.d}</p>
-        <div class="mytask"><div class="lab">${R.e} 나(${R.name})의 미션</div><div class="txt">${M.tasks[myRole]||'팀원 돕기'}</div></div>
-        <button class="btn big donebtn ${iDid?'on':''}" id="doneBtn">${iDid?'✅ 완료했어요! (취소하려면 누르기)':'🙌 내 미션 완료!'}</button>
+        <p class="desc">${M.d}</p>
+        <div class="mytask"><div class="lab">${ico(R.i,18)}나(${R.name})의 미션</div><div class="txt">${M.tasks[myRole]||'팀원 돕기'}</div></div>
+        <button class="btn big donebtn ${iDid?'on':''}" id="doneBtn">${iDid?`${ico('check',22)} 완료! (다시 누르면 취소)`:'내 미션 완료하기'}</button>
         <div style="margin-top:14px"><div class="row between"><b>팀 미션 진행도</b><span class="pill">${P.curDone} / ${P.total}명</span></div>
-          <div class="gauge green" style="margin-top:6px"><div class="fill" style="width:${curPct}%"></div><div class="lbl">${curPct===100?'🎉 미션 클리어!':curPct+'%'}</div></div>
-          <p class="note" style="margin-top:6px">팀원 <b>모두</b>가 완료해야 ⭐을 얻어요. 한 명도 빠지면 안 돼요!</p></div>
+          <div class="gauge green" style="margin-top:6px"><div class="fill" style="width:${curPct}%"></div><div class="lbl">${curPct===100?'미션 클리어!':curPct+'%'}</div></div>
+          <p class="note" style="margin-top:6px">팀원 <b>모두</b>가 완료해야 별을 얻어요. 한 명도 빠지면 안 돼요!</p></div>
       </div></div>`
-    :`<div class="card center" style="padding:24px"><div style="font-size:40px">🎲</div><h3 style="margin-top:6px">협력 미션 대기 중</h3><p class="muted" style="font-weight:700;margin-top:4px">선생님이 미션을 뽑으면 여기에 나타나요!</p></div>`}
+    :`<div class="card center">${ico('die',48)}<h3 style="margin-top:6px">협력 미션 대기 중</h3><p class="sub" style="margin-top:4px">선생님이 미션을 뽑으면 여기에 나타나요!</p></div>`}
 
-    <div class="card"><h3 style="margin-bottom:10px">👥 우리 팀 (${mates.length}명)</h3><div class="members">
+    <div class="card"><h3 style="margin-bottom:10px">우리 팀 (${mates.length}명)</h3><div class="members">
       ${mates.map(m=>{const r=ROLES[m.r]||ROLES.cheer;const ok=checks[m.sid];
-        return `<div class="member ${m.sid===S.sid?'me':''}"><div class="remoji" style="background:${r.color}">${r.e}</div>
-          <div><div class="who">${esc(m.name)} ${m.sid===S.sid?'<span class="pill" style="font-size:11px">나</span>':''}</div>
+        return `<div class="member ${m.sid===S.sid?'me':''}"><div class="ricon" style="background:${r.color}">${ico(r.i,32)}</div>
+          <div><div class="who">${esc(m.name)} ${m.sid===S.sid?'<span class="pill" style="font-size:12px;padding:1px 6px">나</span>':''}</div>
           <div class="what">${r.name}${M?` · ${esc(M.tasks[m.r]||'')}`:''}</div></div>
-          ${M?`<div class="chk">${ok?'✅':'⏳'}</div>`:''}</div>`}).join('')}
+          ${M?`<div class="chk">${ok?ico('check',28):ico('hourglass',26,'opacity:.55')}</div>`:''}</div>`}).join('')}
     </div></div>
     ${goalHTML(d)}
     <div class="center"><button class="btn ghost" onclick="if(confirm('입장 화면으로 나갈까요?'))studentLogout()">나가기</button></div>
@@ -753,13 +929,13 @@ function renderTeam(first){
   if(b)b.onclick=()=>DB.set(`rooms/${S.room}/missions/${tid}/rounds/${P.cur.rid}/checks/${S.sid}`,iDid?null:true);
 }
 async function studentSlot(M,done){
-  overlay(`<div class="slotbox pop"><div style="font-weight:900;letter-spacing:2px">🎲 협력 미션 뽑는 중</div>
-    <div class="slotwin rolling" id="sw"><div class="se">❔</div><div class="st">…</div></div>
-    <div id="swDesc" class="muted" style="font-weight:700;min-height:44px"></div>
-    <button class="btn big yellow" id="swOk" style="visibility:hidden">미션 확인! 💪</button></div>`);
+  overlay(`<div class="slotbox pop"><h2 class="ico-h" style="justify-content:center">${ico('die',28)}협력 미션 뽑는 중</h2>
+    <div class="slotwin slotbg rolling" id="sw">${ico('die',64)}<div class="st">…</div></div>
+    <div id="swDesc" style="font-weight:700;min-height:48px"></div>
+    <button class="btn big green" id="swOk" style="visibility:hidden;margin-top:8px">미션 확인!</button></div>`);
   const sw=$('#sw');
-  for(let k=0;k<18;k++){const m=MISSIONS[Math.floor(Math.random()*MISSIONS.length)];sw.innerHTML=`<div class="se">${m.e}</div><div class="st">${m.t}</div>`;await sleep(60+k*9)}
-  sw.classList.remove('rolling');sw.innerHTML=`<div class="se pop">${M.e}</div><div class="st pop">${M.t}</div>`;
+  for(let k=0;k<18;k++){const m=MISSIONS[Math.floor(Math.random()*MISSIONS.length)];sw.innerHTML=`${ico(m.i,64)}<div class="st">${m.t}</div>`;await sleep(60+k*9)}
+  sw.classList.remove('rolling');sw.innerHTML=`<span class="pop">${ico(M.i,72)}</span><div class="st pop">${M.t}</div>`;
   $('#swDesc').textContent=M.d;$('#swOk').style.visibility='visible';confetti(40);
   $('#swOk').onclick=()=>{closeOverlay();done()};
 }
@@ -772,15 +948,16 @@ function cleanupTeacher(){TS.unsub&&TS.unsub();TS.unsubList&&TS.unsubList();TS.u
 function teacherEntry(){
   let ok=false;try{ok=sessionStorage.getItem('tm_admin')==='1'}catch{}
   if(ok)return teacherHome();
-  app.innerHTML=`${demoBar()}<div class="wrap" style="display:flex;flex-direction:column;justify-content:center;min-height:85vh">
-    <div class="card center pop" style="padding:30px 22px">
-      <span class="hero-emoji">🔐</span><h2 style="margin-top:10px">관리자 입장</h2>
-      <p class="muted" style="font-weight:700;margin:6px 0 16px">비밀번호를 입력하세요</p>
+  app.innerHTML=`${demoBar()}<div class="wrap on-sky" style="display:flex;flex-direction:column;justify-content:center;min-height:78vh">
+    <div class="card grass center pop">
+      <div class="slotbg" style="display:inline-flex;padding:10px">${ico('lock',64)}</div>
+      <h2 style="margin-top:12px">관리자 입장</h2>
+      <p class="sub" style="margin:6px 0 16px">비밀번호를 입력하세요</p>
       <input id="pw" class="input center" type="password" inputmode="numeric" maxlength="12" placeholder="••••" style="font-size:26px;letter-spacing:8px">
-      <button class="btn big yellow" id="pwGo" style="margin-top:14px">입장</button>
+      <button class="btn big green" id="pwGo" style="margin-top:14px">입장</button>
       <button class="btn ghost" style="margin-top:10px" onclick="location.hash=''">← 처음으로</button>
     </div></div>`;
-  const go=()=>{if($('#pw').value===ADMIN_PW){try{sessionStorage.setItem('tm_admin','1')}catch{}teacherHome()}else{toast('비밀번호가 달라요 🙅');$('#pw').value='';$('#pw').focus()}};
+  const go=()=>{if($('#pw').value===ADMIN_PW){try{sessionStorage.setItem('tm_admin','1')}catch{}teacherHome()}else{toast('비밀번호가 달라요');$('#pw').value='';$('#pw').focus()}};
   $('#pwGo').onclick=go;$('#pw').onkeydown=e=>{if(e.key==='Enter')go()};$('#pw').focus();
 }
 function teacherHome(){
@@ -820,21 +997,21 @@ function renderTeacher(){
   if(location.hash!=='#admin')return;
   const keys=Object.keys(TS.rooms).sort();
   const head=`<div class="thead"><div class="in">
-      <span class="logo">🧩 팀워크 메이커 · 관리자</span>
+      <span class="logo">${ico('blk:grass',26,'outline:2px solid #000')} 팀워크 메이커 · 관리자</span>
       ${keys.length?`<select id="roomSel">${keys.map(k=>`<option value="${esc(k)}" ${k===TS.room?'selected':''}>${esc(TS.rooms[k])}</option>`).join('')}</select>`:''}
       <button class="btn sm yellow" onclick="createRoom()">＋ 새 반</button>
       <span class="grow"></span>
-      ${DB.demo?'<span class="pill" style="background:#7B3FC0">🧪 데모 모드</span>':'<span class="pill" style="background:#5AA83A">🟢 실시간 연결</span>'}
-      <button class="btn sm" onclick="try{sessionStorage.removeItem('tm_admin')}catch{};location.hash=''">로그아웃</button>
+      ${DB.demo?'<span class="pill" style="background:#FFF07A">데모 모드</span>':'<span class="pill" style="background:#9BEA7A">실시간 연결</span>'}
+      <button class="btn sm light" onclick="try{sessionStorage.removeItem('tm_admin')}catch{};location.hash=''">로그아웃</button>
     </div></div>`;
   if(!keys.length){
-    app.innerHTML=head+`<div class="wrap"><div class="card center pop" style="padding:34px"><span class="hero-emoji">🏫</span>
-      <h2 style="margin-top:10px">먼저 반을 만들어 주세요</h2><p class="muted" style="font-weight:700;margin:8px 0 18px">반을 만들면 학생들이 입장 화면에서 선택할 수 있어요.</p>
-      <button class="btn big yellow" onclick="createRoom()">＋ 새 반 만들기</button></div></div>`;
+    app.innerHTML=head+`<div class="wrap"><div class="card grass center pop">${cubeHTML('oak',64)}
+      <h2>먼저 반을 만들어 주세요</h2><p class="sub" style="margin:8px 0 18px">반을 만들면 학생들이 입장 화면에서 선택할 수 있어요.</p>
+      <button class="btn big green" onclick="createRoom()">＋ 새 반 만들기</button></div></div>`;
     return;
   }
   const d=TS.data;
-  if(!d){app.innerHTML=head+`<div class="wrap center muted">불러오는 중…</div>`;bindHead();return}
+  if(!d){app.innerHTML=head+`<div class="wrap center sub">불러오는 중…</div>`;bindHead();return}
   const tabs=[['test','① 성향 테스트 현황'],['team','② 팀 편성'],['mission','③ 협력 미션']];
   app.innerHTML=head+`<div class="wrap wide">
     <div class="tabs">${tabs.map(([k,l])=>`<button class="tab ${TS.tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('')}</div>
@@ -853,32 +1030,32 @@ function tabTest(d){
   const maxC=Math.max(1,...Object.values(cnt));
   $('#tbody').innerHTML=`<div class="stack">
     <div class="row" style="align-items:stretch">
-      <div class="card grow" style="min-width:280px"><h3>📲 학생 입장 주소</h3>
+      <div class="card grow" style="min-width:280px"><h3>학생 입장 주소</h3>
         <div class="row" style="margin-top:10px;align-items:flex-start;flex-wrap:nowrap">
           <div class="qr" id="qr"></div>
           <div class="grow"><div class="urlbox">${esc(studentURL())}</div>
             <p class="note" style="margin-top:8px">QR을 찍거나 주소로 접속 → <b>${esc(TS.rooms[TS.room])}</b> 선택 → 번호·이름 입력</p>
-            <div class="row" style="margin-top:8px"><button class="btn sm" id="copyUrl">🔗 주소 복사</button>
-            <button class="btn sm" onclick="window.open(studentURL(),'_blank')">👀 학생 화면 열기</button></div></div>
+            <div class="row" style="margin-top:8px"><button class="btn sm light" id="copyUrl">주소 복사</button>
+            <button class="btn sm light" onclick="window.open(studentURL(),'_blank')">학생 화면 열기</button></div></div>
         </div></div>
       <div class="stats grow" style="min-width:280px">
         <div class="card stat"><div class="n">${studs.length}</div><div class="l">입장한 학생</div></div>
-        <div class="card stat" style="background:#9CCB86"><div class="n">${done.length}</div><div class="l">테스트 완료</div></div>
-        <div class="card stat" style="background:#D9C27A"><div class="n">${studs.length-done.length}</div><div class="l">테스트 중</div></div>
+        <div class="card stat" style="background:#CFF0BF"><div class="n">${done.length}</div><div class="l">테스트 완료</div></div>
+        <div class="card stat" style="background:#FFF0B3"><div class="n">${studs.length-done.length}</div><div class="l">테스트 중</div></div>
       </div>
     </div>
-    <div class="card"><div class="row between"><h3>📊 반 전체 성향 분포</h3><span class="note">🔋 에너지 충전기 = 참여 시동 역할 (부담 낮은 과제로 '0 → 1' 참여 만들기)</span></div>
-      <div class="bars" style="margin-top:12px">${ROLE_IDS.map(r=>`<div class="bar" style="grid-template-columns:170px 1fr 48px"><span>${ROLES[r].e} ${ROLES[r].name}</span>
+    <div class="card"><div class="row between"><h3>반 전체 성향 분포</h3><span class="note ico-h">${ico('heart',16)}에너지 충전기 = 참여 시동 역할 (부담 낮은 과제로 '0 → 1' 참여 만들기)</span></div>
+      <div class="bars" style="margin-top:12px">${ROLE_IDS.map(r=>`<div class="bar" style="grid-template-columns:200px 1fr 52px"><span>${rIco(r,20)}${ROLES[r].name}</span>
         <div class="track"><div class="fill" style="width:${cnt[r]/maxC*100}%;background:${ROLES[r].color}"></div></div><span>${cnt[r]}명</span></div>`).join('')}</div></div>
-    <div class="card"><div class="row between"><h3>🧑‍🎓 학생 목록</h3>
-      <div class="row"><button class="btn sm" id="addBots">🤖 가상 학생 추가(연습용)</button>
-      <button class="btn sm red" id="resetRoom">🧹 이 반 기록 초기화</button><button class="btn sm" id="delRoom">🗑 반 삭제</button></div></div>
+    <div class="card"><div class="row between"><h3>학생 목록</h3>
+      <div class="row"><button class="btn sm light" id="addBots">가상 학생 추가(연습용)</button>
+      <button class="btn sm red" id="resetRoom">이 반 기록 초기화</button><button class="btn sm" id="delRoom">반 삭제</button></div></div>
       ${studs.length?`<div class="sgrid">${studs.map(s=>`<div class="scell ${s.status==='done'?'':'testing'}">
-        <span>${s.status==='done'?ROLES[s.role].e:'⏳'}</span><span>${s.num}. ${esc(s.name)}</span>
+        ${s.status==='done'?rIco(s.role,22):ico('hourglass',22,'opacity:.6')}<span>${s.num}. ${esc(s.name)}</span>
         <button class="x" data-del="${s.sid}" title="삭제">✕</button></div>`).join('')}</div>`
-      :`<p class="muted" style="font-weight:700;margin-top:10px">아직 입장한 학생이 없어요. 위 QR/주소를 학생들에게 안내해 주세요!</p>`}
+      :`<p class="sub" style="margin-top:10px">아직 입장한 학생이 없어요. 위 QR/주소를 학생들에게 안내해 주세요!</p>`}
     </div>
-    <div class="center"><button class="btn big yellow" style="max-width:420px" onclick="TS.tab='team';renderTeacher()">모두 끝났나요? → ② 팀 편성하기</button></div>
+    <div class="center"><button class="btn big green" style="max-width:420px" onclick="TS.tab='team';renderTeacher()">모두 끝났나요? → ② 팀 편성하기</button></div>
   </div>`;
   try{if(window.QRCode)new QRCode($('#qr'),{text:studentURL(),width:280,height:280,correctLevel:QRCode.CorrectLevel.M});else $('#qr').innerHTML='<div style="width:140px;height:140px;display:flex;align-items:center;justify-content:center" class="note">QR 불러오기 실패</div>'}catch{}
   $('#copyUrl').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(studentURL()).then(()=>toast('주소를 복사했어요!'),()=>toast('복사 실패: 주소를 직접 선택해 주세요'))};
@@ -897,7 +1074,7 @@ function addBots(d){
   const used=new Set(Object.values(d.students||{}).map(s=>s.num));const up={};let num=1,added=0;
   while(added<n&&num<100){if(!used.has(num)){const ans=Array.from({length:QUESTIONS.length},()=>Math.random()<.5?'Y':'N').join('');const sc=scoreAnswers(ans);
     up['n'+String(num).padStart(2,'0')]={num,name:fam[Math.floor(Math.random()*fam.length)]+giv[Math.floor(Math.random()*giv.length)],status:'done',answers:ans,raw:sc.raw,norm:sc.norm,role:sc.role,bot:true,joinedAt:Date.now()};added++}num++}
-  DB.update(`rooms/${TS.room}/students`,up);toast(`🤖 가상 학생 ${added}명 추가!`);
+  DB.update(`rooms/${TS.room}/students`,up);toast(`가상 학생 ${added}명 추가!`);
 }
 
 /* --- ② 팀 편성 --- */
@@ -911,40 +1088,40 @@ function tabTeam(d){
   const pool=sortStudents(all.filter(s=>!assigned.has(s.sid)));
   const defCount=d.teamCount||Math.max(1,Math.round(done.length/5)||1);
   const testing=all.length-done.length;
-  const chip=(s,role)=>{const dup=role&&false;return `<div class="chip" data-sid="${s.sid}">
-      <span class="nm">${s.num}. ${esc(s.name)}</span>${s.role?`<span class="tend" title="성향 1순위">${ROLES[s.role].e}</span>`:'<span class="tend">⏳</span>'}
-      ${role?`<select class="rsel" data-sid="${s.sid}">${ROLE_IDS.map(r=>`<option value="${r}" ${r===role?'selected':''}>${ROLES[r].e} ${ROLES[r].name}</option>`).join('')}</select>`:''}</div>`};
+  const chip=(s,role,dup)=>`<div class="chip ${dup?'dup':''}" data-sid="${s.sid}">
+      <span class="nm">${s.num}. ${esc(s.name)}</span>${s.role?`<span title="성향 1순위: ${ROLES[s.role].name}">${rIco(s.role,18)}</span>`:ico('hourglass',18,'opacity:.6')}
+      ${role?`<select class="rsel" data-sid="${s.sid}">${ROLE_IDS.map(r=>`<option value="${r}" ${r===role?'selected':''}>${ROLES[r].name}</option>`).join('')}</select>`:''}</div>`;
   $('#tbody').innerHTML=`<div class="stack">
     <div class="card"><div class="row between">
       <div class="row"><b>팀 수</b>
-        <button class="btn sm" id="tcMinus">－</button><span class="pill" style="font-size:18px;padding:4px 14px" id="tcVal">${defCount}</span><button class="btn sm" id="tcPlus">＋</button>
+        <button class="btn sm light" id="tcMinus">－</button><span class="pill" style="font-size:18px;padding:4px 14px" id="tcVal">${defCount}</span><button class="btn sm light" id="tcPlus">＋</button>
         <span class="note">테스트 완료 ${done.length}명 → 팀당 약 ${defCount?Math.round(done.length/defCount*10)/10:0}명</span></div>
       <div class="row">
-        <button class="btn yellow" id="doAssign">🎲 팀 배정</button>
-        ${d.revealed?`<button class="btn" id="hideBtn">🙈 다시 숨기기</button>`:`<button class="btn green" id="revealBtn" ${tids.length?'':'disabled'}>👀 학생에게 공개</button>`}
+        <button class="btn yellow" id="doAssign">${ico('die',22)} 팀 배정</button>
+        ${d.revealed?`<button class="btn" id="hideBtn">다시 숨기기</button>`:`<button class="btn green" id="revealBtn" ${tids.length?'':'disabled'}>학생에게 공개</button>`}
       </div></div>
-      ${testing?`<p class="note warn-t" style="margin-top:8px">⚠ 아직 테스트 중인 학생 ${testing}명은 자동 배정에서 빠져요. (끝나면 아래 '미배정'에서 끌어다 넣으세요)</p>`:''}
-      <p class="note" style="margin-top:6px">💡 학생 이름을 <b>드래그</b>해서 다른 팀으로 옮길 수 있어요. 역할은 드롭다운으로 바꿔요. 빨간 칸 = 팀 안에서 겹치는 역할.
+      ${testing?`<p class="note warn-t" style="margin-top:8px">아직 테스트 중인 학생 ${testing}명은 자동 배정에서 빠져요. (끝나면 아래 '미배정'에서 끌어다 넣으세요)</p>`:''}
+      <p class="note" style="margin-top:6px">학생 이름을 <b>드래그</b>해서 다른 팀으로 옮길 수 있어요. 역할은 드롭다운으로 바꿔요. 빨간 칸 = 팀 안에서 겹치는 역할.
         ${d.revealed?'<b class="ok-t">현재 학생들에게 공개 중 — 수정하면 바로 반영돼요.</b>':'<b>아직 학생들에게는 보이지 않아요.</b>'}</p>
     </div>
     ${tids.length?`<div class="board">${tids.map(tid=>{const t=teams[tid];const mem=t.members||{};
       const list=sortStudents(Object.keys(mem).map(sid=>({sid,...(studs[sid]||{name:'(삭제됨)',num:0})})));
       const rc={};Object.values(mem).forEach(r=>rc[r]=(rc[r]||0)+1);
       const missing=ROLE_IDS.filter(r=>!rc[r]);const dups=ROLE_IDS.filter(r=>rc[r]>1);
-      return `<div class="tcol" data-drop="${tid}">
-        <h3><span style="font-size:24px">${t.e}</span> ${t.no}모둠 · ${esc(t.name)} <span class="grow"></span><span class="pill">${list.length}명</span></h3>
-        <div class="miss">${dups.length?`<span class="warn">겹침: ${dups.map(r=>ROLES[r].e).join(' ')}</span> · `:''}${missing.length&&list.length?`빈 역할: ${missing.map(r=>ROLES[r].e).join(' ')}`:''}</div>
-        <div class="chips">${list.map(s=>chip(s,mem[s.sid]).replace('class="chip"',`class="chip ${rc[mem[s.sid]]>1?'dup':''}"`)).join('')}</div>
-        <div class="row" style="margin-top:10px"><button class="btn sm" data-reopt="${tid}">🔄 역할 자동 재배치</button>
-          ${list.length?'':`<button class="btn sm" data-deltm="${tid}">🗑 팀 삭제</button>`}</div>
+      return `<div class="card tcol" data-drop="${tid}">
+        <h3>${blockIco(teamBlock(t),26)} ${t.no}모둠 · ${esc(t.name)} <span class="grow"></span><span class="pill">${list.length}명</span></h3>
+        <div class="miss">${dups.length?`<span class="warn">겹침: ${dups.map(r=>rIco(r,16)).join('')}</span> · `:''}${missing.length&&list.length?`빈 역할: ${missing.map(r=>rIco(r,16)).join('')}`:''}</div>
+        <div class="chips">${list.map(s=>chip(s,mem[s.sid],rc[mem[s.sid]]>1)).join('')}</div>
+        <div class="row" style="margin-top:10px"><button class="btn sm light" data-reopt="${tid}">역할 자동 재배치</button>
+          ${list.length?'':`<button class="btn sm light" data-deltm="${tid}">팀 삭제</button>`}</div>
       </div>`}).join('')}
-      <div class="tcol pool" data-drop="pool"><h3>📥 미배정 <span class="grow"></span><span class="pill">${pool.length}명</span></h3>
+      <div class="card tcol pool" data-drop="pool"><h3>미배정 <span class="grow"></span><span class="pill">${pool.length}명</span></h3>
         <div class="miss">여기로 끌어오면 팀에서 빠져요</div>
-        <div class="chips">${pool.map(s=>chip(s,null)).join('')}</div>
-        <div class="row" style="margin-top:10px"><button class="btn sm" id="addTeam">＋ 빈 팀 추가</button></div></div>
+        <div class="chips">${pool.map(s=>chip(s,null,false)).join('')}</div>
+        <div class="row" style="margin-top:10px"><button class="btn sm light" id="addTeam">＋ 빈 팀 추가</button></div></div>
     </div>`
-    :`<div class="card center" style="padding:34px"><div style="font-size:50px">🎲</div><h3 style="margin-top:8px">아직 팀이 없어요</h3>
-      <p class="muted" style="font-weight:700;margin-top:6px">학생들이 테스트를 마치면 <b>팀 수</b>를 정하고 <b>🎲 팀 배정</b>을 눌러 주세요.<br>성향이 몰리지 않게 골고루 섞고, 팀 안에서는 역할이 겹치지 않게 배치해요.</p></div>`}
+    :`<div class="card center">${ico('die',56)}<h3 style="margin-top:8px">아직 팀이 없어요</h3>
+      <p class="sub" style="margin-top:6px">학생들이 테스트를 마치면 <b>팀 수</b>를 정하고 <b>팀 배정</b>을 눌러 주세요.<br>성향이 몰리지 않게 골고루 섞고, 팀 안에서는 역할이 겹치지 않게 배치해요.</p></div>`}
   </div>`;
   let tc=defCount;
   const setTc=v=>{tc=Math.max(1,Math.min(12,v));$('#tcVal').textContent=tc;DB.set(`rooms/${TS.room}/teamCount`,tc)};
@@ -955,13 +1132,14 @@ function tabTeam(d){
     if(tc>done.length)return toast('팀 수가 학생 수보다 많아요');
     const t=buildTeams(done,tc);
     DB.update(`rooms/${TS.room}`,{teams:t,missions:null,bonus:null,revealed:false});
-    toast('🎲 팀 배정 완료! 확인 후 공개해 주세요');
+    toast('팀 배정 완료! 확인 후 공개해 주세요');
   };
   const rb=$('#revealBtn');if(rb)rb.onclick=()=>{
     const empty=tids.filter(t=>!Object.keys(teams[t].members||{}).length);
-    if(pool.filter(s=>s.status==='done').length&&!confirm(`미배정 학생이 ${pool.filter(s=>s.status==='done').length}명 있어요. 그래도 공개할까요?`))return;
+    const left=pool.filter(s=>s.status==='done').length;
+    if(left&&!confirm(`미배정 학생이 ${left}명 있어요. 그래도 공개할까요?`))return;
     if(empty.length&&!confirm('빈 팀이 있어요. 그래도 공개할까요?'))return;
-    DB.update(`rooms/${TS.room}`,{revealed:true,revealAt:Date.now()});confetti(60);toast('👀 모든 학생 화면에 팀이 공개됐어요!');
+    DB.update(`rooms/${TS.room}`,{revealed:true,revealAt:Date.now()});confetti(60);toast('모든 학생 화면에 팀이 공개됐어요!');
   };
   const hb=$('#hideBtn');if(hb)hb.onclick=()=>{DB.set(`rooms/${TS.room}/revealed`,false);toast('학생 화면에서 팀을 숨겼어요')};
   $$('.rsel').forEach(sel=>{sel.onpointerdown=e=>e.stopPropagation();sel.onchange=()=>{
@@ -970,9 +1148,9 @@ function tabTeam(d){
     const asg=assignRoles(Object.keys(mem).map(sid=>({sid,...(studs[sid]||{})})));DB.set(`rooms/${TS.room}/teams/${tid}/members`,asg);toast('역할을 다시 배치했어요')});
   $$('[data-deltm]').forEach(b=>b.onclick=()=>DB.set(`rooms/${TS.room}/teams/${b.dataset.deltm}`,null));
   const at=$('#addTeam');if(at)at.onclick=()=>{
-    const no=Math.max(0,...tids.map(t=>teams[t].no))+1;const usedE=new Set(tids.map(t=>teams[t].e));
-    const [e,n]=TEAM_ANIMALS.find(([e])=>!usedE.has(e))||TEAM_ANIMALS[no%TEAM_ANIMALS.length];
-    DB.set(`rooms/${TS.room}/teams/t${Date.now().toString(36)}`,{no,e,name:`${n} 원정대`,members:null})};
+    const no=Math.max(0,...tids.map(t=>teams[t].no))+1;const used=new Set(tids.map(t=>teams[t].blk));
+    const blk=BLOCK_IDS.find(k=>!used.has(k))||BLOCK_IDS[no%BLOCK_IDS.length];
+    DB.set(`rooms/${TS.room}/teams/t${Date.now().toString(36)}`,{no,blk,name:`${BLOCKS[blk].n} 원정대`,members:null})};
   $$('.chip[data-sid]').forEach(c=>c.addEventListener('pointerdown',e=>startDrag(c,e)));
 }
 function bestFreeRole(stu,mem){
@@ -1021,31 +1199,31 @@ function startDrag(chip,e){
 function tabMission(d){
   const teams=d.teams||{};const studs=d.students||{};
   const tids=Object.keys(teams).sort((a,b)=>teams[a].no-teams[b].no).filter(t=>Object.keys(teams[t].members||{}).length);
-  if(!tids.length){$('#tbody').innerHTML=`<div class="card center" style="padding:34px"><div style="font-size:50px">🧩</div><h3 style="margin-top:8px">먼저 팀을 편성해 주세요</h3>
-    <button class="btn yellow" style="margin-top:14px" onclick="TS.tab='team';renderTeacher()">② 팀 편성으로 →</button></div>`;return}
+  if(!tids.length){$('#tbody').innerHTML=`<div class="card center">${cubeHTML('grass',56,true)}<h3>먼저 팀을 편성해 주세요</h3>
+    <button class="btn green" style="margin-top:14px" onclick="TS.tab='team';renderTeacher()">② 팀 편성으로 →</button></div>`;return}
   const goal=d.goal||10;
   $('#tbody').innerHTML=`<div class="stack">
     <div class="card"><div class="row between">
-      <div><h3>🎲 협력 미션 뽑기</h3><p class="note" style="margin-top:4px">팀마다 다른 미션이 랜덤으로 배정돼요. 각 팀원은 자기 역할의 미션을 완료하고 체크! <b>팀원 모두</b> 완료하면 ⭐ +1</p></div>
-      <div class="row"><button class="btn big yellow" style="width:auto" id="drawAll">🎲 전체 팀 미션 뽑기</button></div></div>
-      ${d.revealed?'':'<p class="note warn-t" style="margin-top:8px">⚠ 팀이 아직 학생들에게 공개되지 않았어요. 학생들은 공개 후에 미션을 볼 수 있어요.</p>'}
+      <div><h3>협력 미션 뽑기</h3><p class="note" style="margin-top:4px">팀마다 다른 미션이 랜덤으로 배정돼요. 각 팀원은 자기 역할의 미션을 완료하고 체크! <b>팀원 모두</b> 완료하면 별 +1</p></div>
+      <div class="row"><button class="btn big yellow" style="width:auto" id="drawAll">${ico('die',26)} 전체 팀 미션 뽑기</button></div></div>
+      ${d.revealed?'':'<p class="note warn-t" style="margin-top:8px">팀이 아직 학생들에게 공개되지 않았어요. 학생들은 공개 후에 미션을 볼 수 있어요.</p>'}
     </div>
-    <div class="card"><div class="row between"><div class="grow" style="min-width:240px">${goalHTML(d).replace(/^<div class="card">|<\/div>$/g,'')}</div>
-      <div class="row"><span class="note">목표 ⭐</span><button class="btn sm" id="gMinus">－</button><b>${goal}</b><button class="btn sm" id="gPlus">＋</button></div></div></div>
+    <div class="card"><div class="row between"><div class="grow" style="min-width:240px">${goalInner(d)}</div>
+      <div class="row"><span class="note">목표 별</span><button class="btn sm light" id="gMinus">－</button><b>${goal}</b><button class="btn sm light" id="gPlus">＋</button></div></div></div>
     <div class="board">${tids.map(tid=>{const t=teams[tid];const P=teamProgress(d,tid,t);const L=levelOf(P.stars);const M=P.cur?MISSION_BY_ID[P.cur.mid]:null;
       const ch=(P.cur&&P.cur.checks)||{};const pct=P.total?Math.round(P.curDone/P.total*100):0;
       const mates=sortStudents(P.mem.map(s=>({sid:s,...(studs[s]||{name:'?'}),r:t.members[s]})));
       return `<div class="card tmcard">
-        <div class="row between"><h3><span style="font-size:24px">${t.e}</span> ${t.no}모둠 · ${esc(t.name)}</h3><span class="pill" style="font-size:15px">⭐ ${P.stars}</span></div>
-        <div class="row" style="margin-top:6px"><span style="font-size:30px">${L.e}</span><b>Lv.${L.idx+1} ${L.n}</b><span class="note">(클리어 ${P.cleared} · 보너스 ${P.bonus})</span></div>
-        ${M?`<div class="cur"><div style="font-weight:900">${M.e} ${M.t}</div><div class="note" style="margin-top:2px">${M.d}</div>
-          <div class="gauge green" style="margin-top:8px"><div class="fill" style="width:${pct}%"></div><div class="lbl">${pct===100?'🎉 클리어!':`${P.curDone}/${P.total}`}</div></div>
-          <div class="mchips">${mates.map(m=>`<button class="mchip ${ch[m.sid]?'ok':''}" data-chk="${tid}|${P.cur.rid}|${m.sid}" title="${esc((M.tasks[m.r]||''))}">${(ROLES[m.r]||ROLES.cheer).e} ${esc(m.name)}</button>`).join('')}</div></div>`
+        <div class="row between"><h3 class="ico-h">${blockIco(teamBlock(t),26)} ${t.no}모둠 · ${esc(t.name)}</h3><span class="pill" style="font-size:15px">${STAR(16)} ${P.stars}</span></div>
+        <div class="row" style="margin-top:6px">${ico(L.i,30)}<b>Lv.${L.idx+1} ${L.n}</b><span class="note">(클리어 ${P.cleared} · 보너스 ${P.bonus})</span></div>
+        ${M?`<div class="cur"><div class="ico-h" style="font-weight:800">${ico(M.i,22)}${M.t}</div><div class="note" style="margin-top:2px">${M.d}</div>
+          <div class="gauge green" style="margin-top:8px"><div class="fill" style="width:${pct}%"></div><div class="lbl">${pct===100?'클리어!':`${P.curDone}/${P.total}`}</div></div>
+          <div class="mchips">${mates.map(m=>`<button class="mchip ${ch[m.sid]?'ok':''}" data-chk="${tid}|${P.cur.rid}|${m.sid}" title="${esc((M.tasks[m.r]||''))}">${rIco(m.r,18)}${esc(m.name)}</button>`).join('')}</div></div>`
           :`<div class="cur note">아직 미션이 없어요</div>`}
-        <div class="row"><button class="btn sm" data-draw="${tid}">🎲 이 팀만 ${M?'새 미션':'뽑기'}</button>
-          <span class="grow"></span><button class="btn sm" data-bonus="${tid}|1" title="보너스 별">⭐+1</button><button class="btn sm" data-bonus="${tid}|-1" title="보너스 별 빼기">⭐−1</button></div>
+        <div class="row"><button class="btn sm light" data-draw="${tid}">${ico('die',16)} 이 팀만 ${M?'새 미션':'뽑기'}</button>
+          <span class="grow"></span><button class="btn sm yellow" data-bonus="${tid}|1" title="보너스 별">${STAR(14)}+1</button><button class="btn sm light" data-bonus="${tid}|-1" title="보너스 별 빼기">−1</button></div>
       </div>`}).join('')}</div>
-    <div class="row" style="justify-content:flex-end"><button class="btn sm red" id="resetMissions">🧹 미션·별 기록 초기화</button></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn sm red" id="resetMissions">미션·별 기록 초기화</button></div>
   </div>`;
   $('#drawAll').onclick=()=>drawMissions(tids,true);
   $$('[data-draw]').forEach(b=>b.onclick=()=>drawMissions([b.dataset.draw],false));
@@ -1071,17 +1249,17 @@ function pickMissions(d,tids){
 async function drawMissions(tids,all){
   const d=TS.data;const teams=d.teams;
   const pending=tids.filter(tid=>{const P=teamProgress(d,tid,teams[tid]);return P.cur&&P.curDone<P.total});
-  if(pending.length&&!confirm(`아직 미션을 다 못 끝낸 팀이 ${pending.length}팀 있어요. 새 미션을 뽑을까요?\n(못 끝낸 미션은 ⭐ 없이 넘어가요)`))return;
+  if(pending.length&&!confirm(`아직 미션을 다 못 끝낸 팀이 ${pending.length}팀 있어요. 새 미션을 뽑을까요?\n(못 끝낸 미션은 별 없이 넘어가요)`))return;
   const picks=pickMissions(d,tids);
-  // 교사 화면 슬롯 연출
-  overlay(`<div class="tslot pop"><div class="row between"><h2>🎲 협력 미션 뽑기!</h2><button class="btn sm" id="tsClose" style="visibility:hidden">닫기 ✕</button></div>
-    <div class="tslot-grid">${tids.map(tid=>`<div class="tslot-cell rolling" id="ts_${tid}"><div class="note" style="font-weight:900">${teams[tid].e} ${teams[tid].no}모둠</div><div class="se">❔</div><div class="st">…</div></div>`).join('')}</div></div>`);
+  const tn=tid=>`<div class="tn">${blockIco(teamBlock(teams[tid]),20)}${teams[tid].no}모둠</div>`;
+  overlay(`<div class="tslot pop"><div class="row between"><h2 class="ico-h">${ico('die',30)}협력 미션 뽑기!</h2><button class="btn sm light" id="tsClose" style="visibility:hidden">닫기 ✕</button></div>
+    <div class="tslot-grid">${tids.map(tid=>`<div class="tslot-cell slotbg rolling" id="ts_${tid}">${tn(tid)}<span class="ic">${ico('die',56)}</span><div class="st">…</div></div>`).join('')}</div></div>`);
   let stopped=0;const t0=Date.now();
   await new Promise(res=>{
     const tick=()=>{
       tids.forEach((tid,i)=>{const cell=$('#ts_'+tid);if(!cell||cell.classList.contains('landed'))return;
-        if(Date.now()-t0>1200+i*450){const m=picks[tid];cell.classList.remove('rolling');cell.classList.add('landed');cell.innerHTML=`<div class="note" style="font-weight:700">${teams[tid].e} ${teams[tid].no}모둠</div><div class="se">${m.e}</div><div class="st">${m.t}</div><div class="note" style="margin-top:4px">${m.d}</div>`;stopped++}
-        else{const m=MISSIONS[Math.floor(Math.random()*MISSIONS.length)];cell.querySelector('.se').textContent=m.e;cell.querySelector('.st').textContent=m.t}});
+        if(Date.now()-t0>1200+i*450){const m=picks[tid];cell.classList.remove('rolling');cell.classList.add('landed');cell.innerHTML=`${tn(tid)}${ico(m.i,56)}<div class="st">${m.t}</div><div class="note" style="color:var(--text)">${m.d}</div>`;stopped++}
+        else{const m=MISSIONS[Math.floor(Math.random()*MISSIONS.length)];cell.querySelector('.ic').innerHTML=ico(m.i,56);cell.querySelector('.st').textContent=m.t}});
       if(stopped<tids.length)setTimeout(tick,80);else res();
     };tick();
   });
