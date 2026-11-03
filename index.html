@@ -5,185 +5,212 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>팀워크 메이커</title>
 <meta name="description" content="모둠 역할 성향 테스트 → 균형 팀 편성 → 협력 미션까지! 우리 반 팀워크 메이커">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
+/* ============ 🧱 블록 픽셀 테마 (Galmuri11 픽셀 폰트, SIL OFL) ============ */
+@font-face{font-family:'Galmuri11';font-weight:400;font-display:swap;
+  src:url('fonts/Galmuri11.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/Galmuri11.woff2') format('woff2')}
+@font-face{font-family:'Galmuri11';font-weight:700;font-display:swap;
+  src:url('fonts/Galmuri11-Bold.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/Galmuri11-Bold.woff2') format('woff2')}
 :root{
-  --bg:#FFF6E5; --bg2:#FFEFD2; --card:#FFFFFF; --ink:#1F1B2E; --muted:#6B6880; --line:#1F1B2E;
-  --red:#FF6B6B; --yellow:#FFD23F; --blue:#4D96FF; --green:#00B894; --purple:#9B5DE5; --pink:#FF8FAB;
-  --radius:18px; --shadow:4px 4px 0 var(--ink);
+  --panel:#C6C6C6; --hi:#FFFFFF; --lo:#555555; --edge:#000000; --slot:#8B8B8B; --slot-hi:#FFFFFF; --slot-lo:#373737;
+  --text:#2B2B2B; --muted:#4E4E4E; --ink:#1E1E1E;
+  --green:#4E9A2F; --red:#B3312C; --blue:#2E5FB5; --yellow:#E8B820; --purple:#7B3FC0; --pink:#D2608F; --gold:#FCDB4A;
+  --bevel:inset 3px 3px 0 var(--hi),inset -3px -3px 0 var(--lo);
+  --bevel-c:inset 3px 3px 0 rgba(255,255,255,.45),inset -3px -3px 0 rgba(0,0,0,.45);
+  --drop:4px 4px 0 rgba(0,0,0,.5);
+  --tex-dirt:none; --tex-grass:none; --tex-stone:none;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0!important}
 html,body{height:100%}
-body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--bg);color:var(--ink);
-  background-image:radial-gradient(circle at 1px 1px,rgba(31,27,46,.08) 1px,transparent 0);background-size:22px 22px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+body{font-family:'Galmuri11','DungGeunMo',ui-monospace,monospace;font-synthesis:none;color:#fff;
+  background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),var(--tex-dirt) #5B3E2B;background-size:auto,64px 64px;
+  image-rendering:pixelated;-webkit-font-smoothing:none;word-break:keep-all;line-height:1.55}
 button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
 input,select{font:inherit;color:inherit}
 #app{min-height:100%;display:flex;flex-direction:column}
-.wrap{width:100%;max-width:560px;margin:0 auto;padding:20px 16px 48px}
-.wide{max-width:1280px}
-.card{background:var(--card);border:3px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border:3px solid var(--line);border-radius:14px;background:#fff;
-  box-shadow:3px 3px 0 var(--ink);font-weight:800;font-size:16px;transition:transform .08s,box-shadow .08s;user-select:none;white-space:nowrap}
-.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn.big{width:100%;padding:16px;font-size:19px;border-radius:16px}
-.btn.sm{padding:6px 12px;font-size:14px;border-width:2px;box-shadow:2px 2px 0 var(--ink);border-radius:10px}
-.btn.yellow{background:var(--yellow)} .btn.red{background:var(--red);color:#fff} .btn.blue{background:var(--blue);color:#fff}
-.btn.green{background:var(--green);color:#fff} .btn.purple{background:var(--purple);color:#fff} .btn.ink{background:var(--ink);color:#fff}
-.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;text-decoration:underline;font-weight:600;color:var(--muted)}
+.wrap{width:100%;max-width:580px;margin:0 auto;padding:20px 16px 48px}
+.wide{max-width:1300px}
+.card{background:var(--panel);color:var(--text);border:3px solid var(--edge);box-shadow:var(--bevel),var(--drop);padding:20px}
+.card.dark{background:#2B2B2B;color:#fff;box-shadow:inset 3px 3px 0 #555,inset -3px -3px 0 #111,var(--drop)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:3px solid var(--edge);background:#7D7D7D;color:#fff;
+  box-shadow:var(--bevel-c);font-weight:700;font-size:16px;text-shadow:2px 2px 0 #3F3F3F;user-select:none;white-space:nowrap;transition:filter .08s}
+.btn:hover{filter:brightness(1.12);outline:2px solid #fff;outline-offset:-5px}
+.btn:active{box-shadow:inset -3px -3px 0 rgba(255,255,255,.35),inset 3px 3px 0 rgba(0,0,0,.5)}
+.btn:disabled{filter:grayscale(1) brightness(.75);cursor:not-allowed;outline:none;color:#BDBDBD}
+.btn.big{width:100%;padding:15px;font-size:19px}
+.btn.sm{padding:6px 11px;font-size:14px;border-width:2px;box-shadow:inset 2px 2px 0 rgba(255,255,255,.45),inset -2px -2px 0 rgba(0,0,0,.45)}
+.btn.yellow{background:#D9A520} .btn.red{background:var(--red)} .btn.blue{background:var(--blue)}
+.btn.green{background:#5AA83A} .btn.purple{background:var(--purple)} .btn.ink{background:#2B2B2B}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;text-decoration:underline;font-weight:400;color:#E6E6E6;text-shadow:2px 2px 0 #000;outline:none}
+.card .btn.ghost{color:var(--muted);text-shadow:none}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.field label{font-weight:800;font-size:15px}
-.input{width:100%;padding:13px 14px;border:3px solid var(--line);border-radius:12px;background:#fff;font-size:17px;outline:none}
-.input:focus{background:#FFFBEA}
-.muted{color:var(--muted)} .center{text-align:center} .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.field label{font-weight:700;font-size:15px}
+.input{width:100%;padding:12px 13px;border:3px solid #A0A0A0;outline:3px solid #000;outline-offset:0;background:#000;color:#fff;font-size:17px}
+.input:focus{border-color:#fff}
+select.input option{background:#000;color:#fff}
+.muted{color:#D0D0D0} .card .muted{color:var(--muted)}
+.center{text-align:center} .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .between{justify-content:space-between} .grow{flex:1}
-h1{font-size:30px;font-weight:900;letter-spacing:-.5px;line-height:1.2}
-h2{font-size:22px;font-weight:900;letter-spacing:-.3px}
-h3{font-size:17px;font-weight:800}
-.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border:2px solid var(--line);border-radius:999px;font-size:13px;font-weight:800;background:#fff}
+h1{font-size:32px;font-weight:700;line-height:1.25;color:#fff;text-shadow:3px 3px 0 #3F3F3F}
+.card h1{color:var(--text);text-shadow:2px 2px 0 #fff}
+h2{font-size:23px;font-weight:700} h3{font-size:17px;font-weight:700}
+.mc-title{font-size:38px;color:#E0E0E0;text-shadow:3px 3px 0 #3A3A3A,6px 6px 0 rgba(0,0,0,.35);letter-spacing:1px}
+.mc-sub{display:inline-block;color:#FFFF55;text-shadow:2px 2px 0 #3F3F00;transform:rotate(-6deg);animation:pulse .6s ease-in-out infinite alternate;font-size:15px}
+@keyframes pulse{to{transform:rotate(-6deg) scale(1.08)}}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border:2px solid #000;font-size:13px;font-weight:700;background:var(--slot);color:#fff;
+  text-shadow:1px 1px 0 #333;box-shadow:inset 2px 2px 0 var(--slot-lo),inset -2px -2px 0 var(--slot-hi)}
 .stack>*+*{margin-top:14px}
-.hero-emoji{font-size:64px;line-height:1;display:block;animation:bob 2.4s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-8px) rotate(-4deg)}}
-@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.hero-emoji{font-size:64px;line-height:1;display:block;animation:bob 1.6s steps(4) infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.pop{animation:pop .45s cubic-bezier(.2,.9,.3,1.2) both}
-.slide{animation:slideIn .35s ease both}
-.demo-bar{background:var(--ink);color:#FFE9A8;font-size:13px;font-weight:700;padding:7px 12px;text-align:center}
+.pop{animation:pop .3s steps(5) both}
+.slide{animation:slideIn .3s steps(6) both}
+.demo-bar{background:#100010;color:#FFFF55;font-size:13px;padding:7px 12px;text-align:center;border-bottom:2px solid #2B0A5C}
 .demo-bar b{color:#fff}
+.grass-top{position:relative}
+.grass-top::before{content:'';position:absolute;left:-3px;right:-3px;top:-3px;height:14px;background:var(--tex-grass) #5DA03A;background-size:64px 64px;border:3px solid #000;border-bottom:none}
+.grass-top>:first-child{margin-top:8px}
 
 /* ---------- 학생: 퀴즈 ---------- */
 .qtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.dots{display:flex;gap:6px}
-.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);background:#fff;display:block}
-.dots i.on{background:var(--yellow)} .dots i.cur{background:var(--ink);transform:scale(1.25)}
+.dots{display:flex;gap:4px}
+.dots i{width:14px;height:14px;border:2px solid #000;background:var(--slot);display:block;box-shadow:inset 2px 2px 0 var(--slot-lo)}
+.dots i.on{background:#5AA83A;box-shadow:inset 2px 2px 0 rgba(255,255,255,.4)} .dots i.cur{background:var(--gold);outline:2px solid #fff}
 .qcard{text-align:center;padding:30px 20px 24px;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px}
-.qnum{font-weight:900;font-size:14px;letter-spacing:2px;background:var(--ink);color:#fff;padding:4px 12px;border-radius:999px}
-.qemoji{font-size:72px;line-height:1}
-.qtext{font-size:23px;font-weight:900;line-height:1.45;white-space:pre-line}
+.qnum{font-size:14px;letter-spacing:2px;background:#2B2B2B;color:#FFFF55;padding:4px 12px;border:2px solid #000}
+.qemoji{font-size:72px;line-height:1;width:116px;height:116px;display:flex;align-items:center;justify-content:center;background:var(--slot);border:3px solid #000;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
+.qtext{font-size:22px;font-weight:700;line-height:1.6;white-space:pre-line}
 .yn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.yn .btn{padding:20px 10px;font-size:22px;border-radius:18px;flex-direction:column;gap:2px}
-.yn .btn small{font-size:13px;font-weight:700;opacity:.85}
+.yn .btn{padding:18px 10px;font-size:22px;flex-direction:column;gap:4px}
+.yn .btn small{font-size:13px;font-weight:400}
 .analyzing{text-align:center;padding:60px 20px}
-.analyzing .spinner{width:72px;height:72px;border:8px solid #fff;border-top-color:var(--ink);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px;box-shadow:var(--shadow)}
+.analyzing .spinner{width:64px;height:64px;margin:0 auto 20px;background:var(--tex-grass) #5DA03A;background-size:64px 64px;border:3px solid #000;animation:spin 1.2s steps(8) infinite}
 
 /* ---------- 역할 카드 ---------- */
 .rolecard{position:relative;overflow:hidden;text-align:center;padding:26px 20px}
-.rolecard .band{position:absolute;inset:0 0 auto 0;height:110px;border-bottom:3px solid var(--line)}
+.rolecard .band{position:absolute;inset:0 0 auto 0;height:104px;border-bottom:3px solid #000;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25)}
 .rolecard .inner{position:relative}
-.role-emoji{font-size:64px;width:108px;height:108px;margin:0 auto;border:3px solid var(--line);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
-.role-name{font-size:30px;font-weight:900;margin-top:12px}
-.role-job{display:inline-block;margin-top:6px}
-.traits{text-align:left;margin-top:16px;display:grid;gap:8px}
-.traits div{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:9px 12px;font-weight:700;font-size:15px}
-.tip{margin-top:14px;padding:12px 14px;border:2px dashed var(--line);border-radius:12px;background:#FFFBEA;font-weight:700;font-size:15px;text-align:left}
+.role-emoji{font-size:60px;width:104px;height:104px;margin:0 auto;border:3px solid #000;background:var(--slot);display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi),var(--drop)}
+.role-name{font-size:30px;font-weight:700;margin-top:12px;color:#fff;text-shadow:3px 3px 0 #3F3F3F,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
+.role-job{margin-top:6px}
+.traits{text-align:left;margin-top:16px;display:grid;gap:6px}
+.traits div{background:#B0B0B0;border:2px solid #000;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E;padding:8px 12px;font-size:15px}
+.tip{margin-top:14px;padding:12px 14px;border:2px solid #2B0A5C;outline:2px solid #100010;background:#100010;color:#fff;font-size:15px;text-align:left}
 .bars{display:grid;gap:7px;margin-top:6px}
-.bar{display:grid;grid-template-columns:118px 1fr 34px;align-items:center;gap:8px;font-size:14px;font-weight:700}
-.bar .track{height:14px;border:2px solid var(--line);border-radius:999px;background:#fff;overflow:hidden}
-.bar .fill{height:100%;border-right:2px solid var(--line);transition:width .8s ease}
-.waiting{display:flex;align-items:center;gap:12px;font-weight:800}
-.waiting .dotdot span{animation:blink 1.2s infinite;display:inline-block}
-.waiting .dotdot span:nth-child(2){animation-delay:.2s}.waiting .dotdot span:nth-child(3){animation-delay:.4s}
-@keyframes blink{50%{opacity:.15}}
+.bar{display:grid;grid-template-columns:182px 1fr 34px;align-items:center;gap:8px;font-size:14px}
+.bar>span:first-child{white-space:nowrap}
+.bar .track{height:14px;border:2px solid #000;background:#2B2B2B;overflow:hidden}
+.bar .fill{height:100%;border-right:2px solid #000;transition:width .8s steps(10);box-shadow:inset 0 3px 0 rgba(255,255,255,.35)}
+.waiting{display:flex;align-items:center;gap:12px}
+.waiting .dotdot span{animation:blink 1.2s steps(1) infinite;display:inline-block}
+.waiting .dotdot span:nth-child(2){animation-delay:.3s}.waiting .dotdot span:nth-child(3){animation-delay:.6s}
+@keyframes blink{50%{opacity:0}}
 .tasklist{display:grid;gap:8px;margin-top:10px;text-align:left}
-.tasklist div{display:flex;gap:8px;align-items:flex-start;font-weight:700;font-size:15px}
-.tasklist b{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--yellow)}
+.tasklist div{display:flex;gap:8px;align-items:flex-start;font-size:15px}
+.tasklist b{flex:none;width:24px;height:24px;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--gold);color:#3F2F00;box-shadow:inset -2px -2px 0 rgba(0,0,0,.3)}
 
 /* ---------- 학생: 팀 / 미션 ---------- */
-.teambanner{text-align:center;padding:22px 18px}
-.teambanner .tname{font-size:28px;font-weight:900}
+.teambanner{text-align:center;padding:24px 18px}
+.teambanner .tname{font-size:28px;font-weight:700;color:#fff;text-shadow:3px 3px 0 #3F3F3F,-1px -1px 0 #000,1px 1px 0 #000}
 .level{display:flex;align-items:center;gap:12px;margin-top:14px;text-align:left}
-.level .mon{font-size:46px;width:70px;height:70px;border:3px solid var(--line);border-radius:18px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex:none}
-.gauge{height:20px;border:3px solid var(--line);border-radius:999px;background:#fff;overflow:hidden;position:relative}
-.gauge .fill{height:100%;background:repeating-linear-gradient(-45deg,var(--yellow) 0 12px,#FFE47A 12px 24px);border-right:3px solid var(--line);transition:width .9s cubic-bezier(.2,.8,.2,1)}
-.gauge.green .fill{background:repeating-linear-gradient(-45deg,#3DDC97 0 12px,#7EEBBA 12px 24px)}
-.gauge.blue .fill{background:repeating-linear-gradient(-45deg,#6FA8FF 0 12px,#A6C8FF 12px 24px)}
-.gauge .lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900}
-.members{display:grid;gap:8px}
-.member{display:flex;align-items:center;gap:10px;padding:10px 12px;border:2px solid var(--line);border-radius:14px;background:#fff}
-.member.me{background:#FFFBEA;box-shadow:3px 3px 0 var(--ink)}
-.member .remoji{font-size:26px;width:44px;height:44px;border-radius:12px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;flex:none}
-.member .who{font-weight:900}
-.member .what{font-size:13px;color:var(--muted);font-weight:700}
+.level .mon{font-size:42px;width:70px;height:70px;border:3px solid #000;background:var(--slot);display:flex;align-items:center;justify-content:center;flex:none;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
+.gauge{height:22px;border:3px solid #000;background:#1E1E1E;overflow:hidden;position:relative}
+.gauge::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),#000 calc(10% - 2px) 10%);pointer-events:none}
+.gauge .fill{height:100%;background:#80D830;box-shadow:inset 0 4px 0 #B8FF6A,inset 0 -4px 0 #4E8F18;transition:width .9s steps(10)}
+.gauge.green .fill{background:#4ACD5A;box-shadow:inset 0 4px 0 #9BFFA5,inset 0 -4px 0 #237A2E}
+.gauge.blue .fill{background:#4FC3E8;box-shadow:inset 0 4px 0 #A5EEFF,inset 0 -4px 0 #1E7FA0}
+.gauge .lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000;z-index:1}
+.members{display:grid;gap:6px}
+.member{display:flex;align-items:center;gap:10px;padding:8px 10px;border:2px solid #000;background:#B0B0B0;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E}
+.member.me{background:#E8D58A;box-shadow:inset 2px 2px 0 #FFF3BE,inset -2px -2px 0 #A08A30;outline:2px solid #fff;outline-offset:-6px}
+.member .remoji{font-size:24px;width:44px;height:44px;border:2px solid #000;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:var(--bevel-c)}
+.member .who{font-weight:700}
+.member .what{font-size:13px;color:#3A3A3A}
 .member .chk{margin-left:auto;font-size:22px}
 .mission{padding:0;overflow:hidden}
-.mission .mhead{padding:16px 18px;background:var(--ink);color:#fff;display:flex;gap:12px;align-items:center}
-.mission .mhead .me{font-size:40px}
+.mission .mhead{padding:14px 18px;background:#2B2B2B;color:#fff;display:flex;gap:12px;align-items:center;border-bottom:3px solid #000}
+.mission .mhead .me{font-size:38px}
 .mission .mbody{padding:16px 18px}
-.mytask{border:3px solid var(--line);border-radius:14px;padding:14px;background:#FFFBEA;margin:12px 0}
-.mytask .lab{font-size:13px;font-weight:900;color:var(--muted)}
-.mytask .txt{font-size:19px;font-weight:900;margin-top:4px}
-.donebtn.on{background:var(--green);color:#fff}
+.mytask{border:3px solid #000;padding:14px;background:#E8D58A;box-shadow:inset 3px 3px 0 #FFF3BE,inset -3px -3px 0 #A08A30;margin:12px 0}
+.mytask .lab{font-size:13px;color:#5A4A10}
+.mytask .txt{font-size:19px;font-weight:700;margin-top:4px}
+.donebtn.on{background:#5AA83A}
 .goalbox{display:flex;align-items:center;gap:12px}
 .goalbox .gift{font-size:36px}
 
 /* ---------- 오버레이 ---------- */
-#overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(31,27,46,.82);padding:16px}
+#overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(16,0,16,.78);padding:16px}
 #overlay.show{display:flex}
-.count{font-size:160px;font-weight:900;color:var(--yellow);text-shadow:6px 6px 0 #000;animation:pop .5s both}
-.slotbox{background:#fff;border:4px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 #000;padding:26px;text-align:center;width:100%;max-width:440px}
-.slotwin{height:120px;overflow:hidden;border:3px solid var(--ink);border-radius:16px;background:var(--bg);margin:14px 0;display:flex;align-items:center;justify-content:center;flex-direction:column}
-.slotwin .se{font-size:52px;line-height:1}
-.slotwin .st{font-size:20px;font-weight:900;margin-top:6px}
-.slotwin.rolling .se,.slotwin.rolling .st{filter:blur(1.5px)}
-.tslot{background:#fff;border:4px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 #000;padding:22px;width:100%;max-width:980px;max-height:92vh;overflow:auto}
-.tslot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
-.tslot-cell{border:3px solid var(--ink);border-radius:16px;padding:14px;text-align:center;background:var(--bg)}
+.count{font-size:160px;font-weight:700;color:var(--gold);text-shadow:8px 8px 0 #3F3000;animation:pop .3s steps(4) both}
+.slotbox,.tslot{background:var(--panel);color:var(--text);border:3px solid #000;box-shadow:var(--bevel),6px 6px 0 #000;padding:24px;text-align:center;width:100%;max-width:440px}
+.tslot{max-width:1000px;max-height:92vh;overflow:auto;text-align:left}
+.slotwin{height:124px;overflow:hidden;border:3px solid #000;background:var(--slot);box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi);margin:14px 0;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-shadow:2px 2px 0 #333}
+.slotwin .se{font-size:50px;line-height:1}
+.slotwin .st{font-size:20px;font-weight:700;margin-top:6px}
+.slotwin.rolling .se,.slotwin.rolling .st{filter:blur(1px)}
+.tslot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:14px}
+.tslot-cell{border:3px solid #000;padding:14px;text-align:center;background:var(--slot);color:#fff;box-shadow:inset 3px 3px 0 var(--slot-lo),inset -3px -3px 0 var(--slot-hi)}
+.tslot-cell .note{color:#fff!important}
 .tslot-cell .se{font-size:44px}
-.tslot-cell .st{font-weight:900;font-size:18px;margin-top:4px}
-.tslot-cell.rolling .se,.tslot-cell.rolling .st{filter:blur(1.5px);opacity:.8}
-.tslot-cell.landed{background:var(--yellow);animation:pop .4s both}
+.tslot-cell .st{font-weight:700;font-size:18px;margin-top:4px;text-shadow:2px 2px 0 #333}
+.tslot-cell.rolling .se,.tslot-cell.rolling .st{filter:blur(1px);opacity:.8}
+.tslot-cell.landed{background:#D9A520;box-shadow:var(--bevel-c);animation:pop .3s steps(4) both}
 
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:800;z-index:60;transition:transform .3s;max-width:calc(100% - 32px);text-align:center}
-#toast.show{transform:translateX(-50%) translateY(0)}
-.confetti{position:fixed;top:-40px;font-size:26px;z-index:70;pointer-events:none;animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140px);background:#100010;color:#fff;padding:12px 18px;border:3px solid #2B0A5C;outline:2px solid #100010;z-index:60;transition:transform .25s steps(5),visibility .25s;visibility:hidden;max-width:calc(100% - 32px);text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0);visibility:visible}
+.confetti{position:fixed;top:-40px;width:14px;height:14px;z-index:70;pointer-events:none;border:2px solid rgba(0,0,0,.5);animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
 
 /* ---------- 교사 ---------- */
-.thead{background:var(--ink);color:#fff;padding:12px 16px;position:sticky;top:0;z-index:20}
-.thead .in{max-width:1280px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.thead .logo{font-weight:900;font-size:18px;margin-right:6px}
-.thead .btn{color:var(--ink)}
-.thead select{padding:8px 10px;border-radius:10px;border:2px solid #fff;background:#2D2842;color:#fff;font-weight:800}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
-.tab{padding:10px 16px;border:3px solid var(--line);border-radius:14px;background:#fff;font-weight:900;font-size:16px}
-.tab.on{background:var(--yellow);box-shadow:3px 3px 0 var(--ink)}
+.thead{background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--tex-stone) #6B6B6B;background-size:auto,64px 64px;color:#fff;padding:12px 16px;position:sticky;top:0;z-index:20;border-bottom:3px solid #000}
+.thead .in{max-width:1300px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.thead .logo{font-weight:700;font-size:18px;margin-right:6px;text-shadow:2px 2px 0 #000}
+.thead select{padding:7px 10px;border:3px solid #A0A0A0;outline:2px solid #000;background:#000;color:#fff}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0}
+.tab{padding:10px 16px;border:3px solid #000;background:#7D7D7D;color:#fff;text-shadow:2px 2px 0 #3F3F3F;font-size:16px;box-shadow:var(--bevel-c)}
+.tab.on{background:var(--panel);color:var(--text);text-shadow:none;box-shadow:var(--bevel);transform:translateY(-3px)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .stat{padding:14px 16px}
-.stat .n{font-size:32px;font-weight:900}
-.stat .l{font-weight:800;color:var(--muted);font-size:14px}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-top:12px}
-.scell{display:flex;align-items:center;gap:8px;padding:8px 10px;border:2px solid var(--line);border-radius:12px;background:#fff;font-weight:800;font-size:15px}
-.scell .x{margin-left:auto;opacity:.35;font-size:14px;padding:2px 6px}
-.scell .x:hover{opacity:1}
-.scell.testing{background:#F1F0F5;color:var(--muted)}
-.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-.tcol{background:#fff;border:3px solid var(--line);border-radius:18px;padding:12px;min-height:160px;transition:background .15s}
-.tcol.over{background:#FFF2B3;transform:scale(1.01)}
+.stat .n{font-size:32px;font-weight:700}
+.stat .l{color:var(--muted);font-size:14px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin-top:12px}
+.scell{display:flex;align-items:center;gap:8px;padding:7px 10px;border:2px solid #000;background:#B0B0B0;font-size:15px;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E}
+.scell .x{margin-left:auto;opacity:.45;font-size:14px;padding:2px 6px}
+.scell .x:hover{opacity:1;color:var(--red)}
+.scell.testing{background:#8F8F8F;color:#E0E0E0}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.tcol{background:var(--panel);color:var(--text);border:3px solid #000;box-shadow:var(--bevel),var(--drop);padding:12px;min-height:160px}
+.tcol.over{background:#E8D58A;outline:3px solid #fff;outline-offset:-8px}
 .tcol h3{display:flex;align-items:center;gap:6px}
-.tcol .miss{font-size:12px;font-weight:700;color:var(--muted);margin:4px 0 8px;min-height:16px}
-.tcol .miss .warn{color:#D63031}
-.chips{display:grid;gap:6px}
-.chip{display:flex;align-items:center;gap:6px;padding:6px 8px;border:2px solid var(--line);border-radius:12px;background:var(--bg);cursor:grab;touch-action:none;user-select:none;font-weight:800;font-size:15px}
-.chip .rsel{margin-left:auto;font-size:13px;font-weight:800;border:2px solid var(--line);border-radius:8px;padding:3px 4px;background:#fff;max-width:128px}
-.chip .tend{font-size:12px;color:var(--muted);font-weight:700}
-.chip.dup{background:#FFE0E0}
+.tcol .miss{font-size:12px;color:var(--muted);margin:4px 0 8px;min-height:16px}
+.tcol .miss .warn{color:#A01010}
+.chips{display:grid;gap:5px}
+.chip{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;padding:6px 8px;border:2px solid #000;background:#B0B0B0;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E;
+  cursor:grab;touch-action:none;user-select:none;font-size:15px}
+.chip .nm{white-space:nowrap}
+.chip .rsel{margin-left:auto;flex:0 0 auto;font-size:13px;border:2px solid #A0A0A0;outline:1px solid #000;padding:3px 4px;background:#000;color:#fff;max-width:none;width:auto}
+.chip .tend{font-size:12px}
+.chip.dup{background:#D98A8A;box-shadow:inset 2px 2px 0 #F2B8B8,inset -2px -2px 0 #8A3A3A}
 .chip.src{opacity:.35}
-.chip.ghost{position:fixed;z-index:80;pointer-events:none;box-shadow:6px 6px 0 var(--ink);transform:rotate(-3deg);cursor:grabbing}
-.pool{background:#F4F1EA;border-style:dashed}
+.chip.ghost{position:fixed;z-index:80;pointer-events:none;box-shadow:6px 6px 0 rgba(0,0,0,.6);cursor:grabbing;outline:2px solid #fff}
+.pool{background:#9A9A9A}
 .legend{display:flex;flex-wrap:wrap;gap:6px}
 .tmcard{padding:16px}
-.tmcard .cur{border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);margin:10px 0}
-.mchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.mchip{padding:5px 10px;border:2px solid var(--line);border-radius:999px;font-weight:800;font-size:14px;background:#fff}
-.mchip.ok{background:var(--green);color:#fff}
-.qr{background:#fff;padding:8px;border:3px solid var(--line);border-radius:12px;display:inline-block}
+.tmcard .cur{border:2px solid #000;padding:10px 12px;background:#B0B0B0;box-shadow:inset 2px 2px 0 #DADADA,inset -2px -2px 0 #6E6E6E;margin:10px 0}
+.mchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.mchip{padding:5px 9px;border:2px solid #000;font-size:14px;background:var(--slot);color:#fff;text-shadow:1px 1px 0 #333;box-shadow:inset 2px 2px 0 var(--slot-lo),inset -2px -2px 0 var(--slot-hi)}
+.mchip.ok{background:#5AA83A;box-shadow:var(--bevel-c)}
+.qr{background:#fff;padding:8px;border:3px solid #000;display:inline-block}
 .qr img,.qr canvas{display:block;width:140px;height:140px}
-.urlbox{font-family:ui-monospace,Menlo,monospace;font-size:14px;background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:8px 10px;word-break:break-all}
-.note{font-size:13px;color:var(--muted);font-weight:600}
+.urlbox{font-size:14px;background:#000;color:#fff;border:2px solid #A0A0A0;outline:2px solid #000;padding:8px 10px;word-break:break-all}
+.note{font-size:13px;color:#D0D0D0} .card .note,.tcol .note{color:var(--muted)}
+.warn-t{color:#A01010!important} .ok-t{color:#1E6B10!important}
 @media (max-width:600px){
-  h1{font-size:26px} .qtext{font-size:20px} .board{grid-template-columns:1fr}
-  .bar{grid-template-columns:100px 1fr 30px;font-size:13px}
+  h1{font-size:26px} .mc-title{font-size:30px} .qtext{font-size:19px} .board{grid-template-columns:1fr}
+  .bar{grid-template-columns:166px 1fr 30px;font-size:13px}
 }
 @media print{.thead,.tabs,.btn{display:none!important}}
 </style>
@@ -298,8 +325,8 @@ const MISSION_BY_ID = Object.fromEntries(MISSIONS.map(m=>[m.id,m]));
 
 /* 팀 레벨 & 팀 이름 */
 const LEVELS = [
-  {min:0,e:'🥚',n:'협력의 알'},{min:1,e:'🐣',n:'갓 태어난 팀'},{min:2,e:'🐥',n:'쑥쑥 크는 팀'},
-  {min:3,e:'🦅',n:'날개 단 팀'},{min:5,e:'🐉',n:'전설의 드림팀'}
+  {min:0,e:'🪵',n:'나무 등급 팀'},{min:1,e:'🪨',n:'돌 등급 팀'},{min:2,e:'⛓️',n:'철 등급 팀'},
+  {min:3,e:'🥇',n:'금 등급 팀'},{min:5,e:'💎',n:'다이아 등급 팀'}
 ];
 const TEAM_ANIMALS = [['🦊','여우'],['🐯','호랑이'],['🐬','돌고래'],['🦉','부엉이'],['🐺','늑대'],['🐼','판다'],['🦁','사자'],['🐧','펭귄'],['🦄','유니콘'],['🐙','문어'],['🐢','거북'],['🦖','공룡']];
 
@@ -322,8 +349,8 @@ const LS = {get(k,d=null){try{const v=store().getItem(k);return v==null?d:JSON.p
 const ME={get:()=>LS.get('tm_me'),set:v=>LS.set('tm_me',v),del:()=>LS.del('tm_me')};
 let toastTimer;
 function toast(msg,ms=2200){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),ms)}
-function confetti(n=70){const em=['🎉','⭐','✨','🎊','💛','🧩'];for(let i=0;i<n;i++){const s=document.createElement('div');s.className='confetti';s.textContent=em[i%em.length];
-  s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.8)+'s';s.style.animationDelay=(Math.random()*.6)+'s';s.style.fontSize=(18+Math.random()*18)+'px';
+function confetti(n=70){const col=['#5DA03A','#8B5A2B','#4FC3E8','#FCDB4A','#B3312C','#7B3FC0','#E0E0E0'];for(let i=0;i<n;i++){const s=document.createElement('div');s.className='confetti';s.style.background=col[i%col.length];
+  s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.8)+'s';s.style.animationDelay=(Math.random()*.6)+'s';const z=10+Math.floor(Math.random()*3)*4;s.style.width=s.style.height=z+'px';
   document.body.appendChild(s);setTimeout(()=>s.remove(),4200)}}
 function overlay(html){const o=$('#overlay');o.innerHTML=html;o.classList.add('show');return o}
 function closeOverlay(){const o=$('#overlay');o.classList.remove('show');o.innerHTML=''}
@@ -416,7 +443,22 @@ function buildTeams(students,count){
 /* =====================================================================
    🚦 라우터
    ===================================================================== */
+function makeTextures(){
+  const tex=(draw)=>{const c=document.createElement('canvas');c.width=c.height=16;const g=c.getContext('2d');let seed=7;
+    const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+    for(let y=0;y<16;y++)for(let x=0;x<16;x++){g.fillStyle=draw(x,y,rnd);g.fillRect(x,y,1,1)}return `url(${c.toDataURL()})`};
+  const pick=(a,r)=>a[Math.floor(r()*a.length)];
+  const dirt=['#6B4A2F','#5B3E2B','#7A5636','#4E3422','#8A643F'];
+  const grass=['#5DA03A','#6CB244','#4E8F2E','#79BF4D'];
+  const stone=['#7F7F7F','#747474','#8C8C8C','#6A6A6A','#999999'];
+  const root=document.documentElement.style;
+  root.setProperty('--tex-dirt',tex((x,y,r)=>pick(dirt,r)));
+  const edge=[3,4,3,2,3,4,5,4,3,3,2,3,4,4,3,2];
+  root.setProperty('--tex-grass',tex((x,y,r)=>y<edge[x]?pick(grass,r):pick(dirt,r)));
+  root.setProperty('--tex-stone',tex((x,y,r)=>pick(stone,r)));
+}
 async function boot(){
+  makeTextures();
   await DB.init();
   window.addEventListener('hashchange',route);
   route();
@@ -431,11 +473,14 @@ function route(){
 }
 function landing(){
   app.innerHTML=`${demoBar()}<div class="wrap" style="display:flex;flex-direction:column;justify-content:center;min-height:90vh">
-    <div class="card center pop" style="padding:34px 22px">
-      <span class="hero-emoji">🧩</span>
-      <h1 style="margin-top:12px">팀워크 메이커</h1>
-      <p class="muted" style="margin-top:8px;font-weight:700;line-height:1.6">나의 모둠 역할 성향을 찾고<br>우리 팀과 협력 미션을 깨자!</p>
-      <div class="stack" style="margin-top:24px">
+    <div class="center pop" style="margin-bottom:22px">
+      <span class="hero-emoji">🧱</span>
+      <h1 class="mc-title" style="margin-top:12px">팀워크 메이커</h1>
+      <span class="mc-sub">모두가 한 블록씩!</span>
+    </div>
+    <div class="card grass-top center pop" style="padding:28px 22px">
+      <p style="line-height:1.7">나의 모둠 역할 성향을 찾고<br>우리 팀과 협력 미션을 깨자!</p>
+      <div class="stack" style="margin-top:20px">
         <button class="btn big yellow" onclick="location.hash='#join'">🙋 학생으로 시작하기</button>
         <button class="btn big" onclick="location.hash='#admin'">🧑‍🏫 선생님 입장</button>
       </div>
@@ -456,7 +501,7 @@ function studentEntry(){
   app.innerHTML=`${demoBar()}<div class="wrap">
     <div class="center" style="margin:10px 0 18px"><span class="hero-emoji">🙋</span><h1 style="margin-top:8px">입장하기</h1>
       <p class="muted" style="font-weight:700;margin-top:6px">8개의 YES/NO 질문으로<br>나의 모둠 역할 성향을 찾아봐요!</p></div>
-    <div class="card pop">
+    <div class="card grass-top pop">
       <div class="field"><label>우리 반</label><select id="sRoom" class="input"><option value="">불러오는 중…</option></select></div>
       <div class="row" style="align-items:flex-start">
         <div class="field" style="width:110px"><label>번호</label><input id="sNum" class="input" type="number" inputmode="numeric" min="1" max="99" placeholder="7"></div>
@@ -599,7 +644,7 @@ function renderResult(st){
     ${roleCardHTML(st.role,{bars:barsHTML(st.norm||{})})}
     <div class="card"><h3>📝 이 역할이 하는 일 (딱 3가지!)</h3>
       <div class="tasklist">${ROLES[st.role].tasks.map((t,i)=>`<div><b>${i+1}</b>${t}</div>`).join('')}</div></div>
-    <div class="card" style="background:var(--ink);color:#fff;border-color:var(--ink)">
+    <div class="card dark">
       <div class="waiting">⏳ <span>선생님이 팀을 공개할 때까지 기다려요<span class="dotdot"><span>.</span><span>.</span><span>.</span></span></span></div>
       <p style="font-size:14px;opacity:.8;margin-top:8px;font-weight:600">성향이 비슷한 친구끼리 몰리지 않게 골고루 팀이 짜여요. 팀 안에서 역할이 겹치면 두 번째로 잘 맞는 역할을 맡을 수도 있어요!</p>
     </div>
@@ -667,7 +712,7 @@ function renderTeam(first){
 
   const changed=st.role&&st.role!==myRole;
   app.innerHTML=`${demoBar()}<div class="wrap stack">
-    <div class="card teambanner ${first?'pop':''}" style="background:linear-gradient(180deg,${R.color}55,#fff 60%)">
+    <div class="card grass-top teambanner ${first?'pop':''}" style="background:linear-gradient(180deg,${R.color} 0 34%,var(--panel) 34%)">
       <div style="font-size:54px;line-height:1">${team.e}</div>
       <div class="muted" style="font-weight:800;margin-top:6px">${team.no}모둠</div>
       <div class="tname">${esc(team.name)}</div>
@@ -779,7 +824,7 @@ function renderTeacher(){
       ${keys.length?`<select id="roomSel">${keys.map(k=>`<option value="${esc(k)}" ${k===TS.room?'selected':''}>${esc(TS.rooms[k])}</option>`).join('')}</select>`:''}
       <button class="btn sm yellow" onclick="createRoom()">＋ 새 반</button>
       <span class="grow"></span>
-      ${DB.demo?'<span class="pill" style="background:#FFE9A8">🧪 데모 모드</span>':'<span class="pill" style="background:#7EEBBA">🟢 실시간 연결</span>'}
+      ${DB.demo?'<span class="pill" style="background:#7B3FC0">🧪 데모 모드</span>':'<span class="pill" style="background:#5AA83A">🟢 실시간 연결</span>'}
       <button class="btn sm" onclick="try{sessionStorage.removeItem('tm_admin')}catch{};location.hash=''">로그아웃</button>
     </div></div>`;
   if(!keys.length){
@@ -818,12 +863,12 @@ function tabTest(d){
         </div></div>
       <div class="stats grow" style="min-width:280px">
         <div class="card stat"><div class="n">${studs.length}</div><div class="l">입장한 학생</div></div>
-        <div class="card stat" style="background:#E3FFF2"><div class="n">${done.length}</div><div class="l">테스트 완료</div></div>
-        <div class="card stat" style="background:#FFF2CC"><div class="n">${studs.length-done.length}</div><div class="l">테스트 중</div></div>
+        <div class="card stat" style="background:#9CCB86"><div class="n">${done.length}</div><div class="l">테스트 완료</div></div>
+        <div class="card stat" style="background:#D9C27A"><div class="n">${studs.length-done.length}</div><div class="l">테스트 중</div></div>
       </div>
     </div>
     <div class="card"><div class="row between"><h3>📊 반 전체 성향 분포</h3><span class="note">🔋 에너지 충전기 = 참여 시동 역할 (부담 낮은 과제로 '0 → 1' 참여 만들기)</span></div>
-      <div class="bars" style="margin-top:12px">${ROLE_IDS.map(r=>`<div class="bar" style="grid-template-columns:150px 1fr 40px"><span>${ROLES[r].e} ${ROLES[r].name}</span>
+      <div class="bars" style="margin-top:12px">${ROLE_IDS.map(r=>`<div class="bar" style="grid-template-columns:170px 1fr 48px"><span>${ROLES[r].e} ${ROLES[r].name}</span>
         <div class="track"><div class="fill" style="width:${cnt[r]/maxC*100}%;background:${ROLES[r].color}"></div></div><span>${cnt[r]}명</span></div>`).join('')}</div></div>
     <div class="card"><div class="row between"><h3>🧑‍🎓 학생 목록</h3>
       <div class="row"><button class="btn sm" id="addBots">🤖 가상 학생 추가(연습용)</button>
@@ -867,7 +912,7 @@ function tabTeam(d){
   const defCount=d.teamCount||Math.max(1,Math.round(done.length/5)||1);
   const testing=all.length-done.length;
   const chip=(s,role)=>{const dup=role&&false;return `<div class="chip" data-sid="${s.sid}">
-      <span>${s.num}. ${esc(s.name)}</span>${s.role?`<span class="tend" title="성향 1순위">${ROLES[s.role].e}</span>`:'<span class="tend">⏳</span>'}
+      <span class="nm">${s.num}. ${esc(s.name)}</span>${s.role?`<span class="tend" title="성향 1순위">${ROLES[s.role].e}</span>`:'<span class="tend">⏳</span>'}
       ${role?`<select class="rsel" data-sid="${s.sid}">${ROLE_IDS.map(r=>`<option value="${r}" ${r===role?'selected':''}>${ROLES[r].e} ${ROLES[r].name}</option>`).join('')}</select>`:''}</div>`};
   $('#tbody').innerHTML=`<div class="stack">
     <div class="card"><div class="row between">
@@ -878,9 +923,9 @@ function tabTeam(d){
         <button class="btn yellow" id="doAssign">🎲 팀 배정</button>
         ${d.revealed?`<button class="btn" id="hideBtn">🙈 다시 숨기기</button>`:`<button class="btn green" id="revealBtn" ${tids.length?'':'disabled'}>👀 학생에게 공개</button>`}
       </div></div>
-      ${testing?`<p class="note" style="margin-top:8px;color:#D63031">⚠ 아직 테스트 중인 학생 ${testing}명은 자동 배정에서 빠져요. (끝나면 아래 '미배정'에서 끌어다 넣으세요)</p>`:''}
+      ${testing?`<p class="note warn-t" style="margin-top:8px">⚠ 아직 테스트 중인 학생 ${testing}명은 자동 배정에서 빠져요. (끝나면 아래 '미배정'에서 끌어다 넣으세요)</p>`:''}
       <p class="note" style="margin-top:6px">💡 학생 이름을 <b>드래그</b>해서 다른 팀으로 옮길 수 있어요. 역할은 드롭다운으로 바꿔요. 빨간 칸 = 팀 안에서 겹치는 역할.
-        ${d.revealed?'<b style="color:#00866B">현재 학생들에게 공개 중 — 수정하면 바로 반영돼요.</b>':'<b>아직 학생들에게는 보이지 않아요.</b>'}</p>
+        ${d.revealed?'<b class="ok-t">현재 학생들에게 공개 중 — 수정하면 바로 반영돼요.</b>':'<b>아직 학생들에게는 보이지 않아요.</b>'}</p>
     </div>
     ${tids.length?`<div class="board">${tids.map(tid=>{const t=teams[tid];const mem=t.members||{};
       const list=sortStudents(Object.keys(mem).map(sid=>({sid,...(studs[sid]||{name:'(삭제됨)',num:0})})));
@@ -983,7 +1028,7 @@ function tabMission(d){
     <div class="card"><div class="row between">
       <div><h3>🎲 협력 미션 뽑기</h3><p class="note" style="margin-top:4px">팀마다 다른 미션이 랜덤으로 배정돼요. 각 팀원은 자기 역할의 미션을 완료하고 체크! <b>팀원 모두</b> 완료하면 ⭐ +1</p></div>
       <div class="row"><button class="btn big yellow" style="width:auto" id="drawAll">🎲 전체 팀 미션 뽑기</button></div></div>
-      ${d.revealed?'':'<p class="note" style="margin-top:8px;color:#D63031">⚠ 팀이 아직 학생들에게 공개되지 않았어요. 학생들은 공개 후에 미션을 볼 수 있어요.</p>'}
+      ${d.revealed?'':'<p class="note warn-t" style="margin-top:8px">⚠ 팀이 아직 학생들에게 공개되지 않았어요. 학생들은 공개 후에 미션을 볼 수 있어요.</p>'}
     </div>
     <div class="card"><div class="row between"><div class="grow" style="min-width:240px">${goalHTML(d).replace(/^<div class="card">|<\/div>$/g,'')}</div>
       <div class="row"><span class="note">목표 ⭐</span><button class="btn sm" id="gMinus">－</button><b>${goal}</b><button class="btn sm" id="gPlus">＋</button></div></div></div>
@@ -1035,7 +1080,7 @@ async function drawMissions(tids,all){
   await new Promise(res=>{
     const tick=()=>{
       tids.forEach((tid,i)=>{const cell=$('#ts_'+tid);if(!cell||cell.classList.contains('landed'))return;
-        if(Date.now()-t0>1200+i*450){const m=picks[tid];cell.classList.remove('rolling');cell.classList.add('landed');cell.innerHTML=`<div class="note" style="font-weight:900;color:var(--ink)">${teams[tid].e} ${teams[tid].no}모둠</div><div class="se">${m.e}</div><div class="st">${m.t}</div><div class="note" style="margin-top:4px;color:var(--ink)">${m.d}</div>`;stopped++}
+        if(Date.now()-t0>1200+i*450){const m=picks[tid];cell.classList.remove('rolling');cell.classList.add('landed');cell.innerHTML=`<div class="note" style="font-weight:700">${teams[tid].e} ${teams[tid].no}모둠</div><div class="se">${m.e}</div><div class="st">${m.t}</div><div class="note" style="margin-top:4px">${m.d}</div>`;stopped++}
         else{const m=MISSIONS[Math.floor(Math.random()*MISSIONS.length)];cell.querySelector('.se').textContent=m.e;cell.querySelector('.st').textContent=m.t}});
       if(stopped<tids.length)setTimeout(tick,80);else res();
     };tick();
