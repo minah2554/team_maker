@@ -270,10 +270,56 @@ h3{font-size:18px;font-weight:800;line-height:1.4}
 .qr{background:#fff;padding:8px;border:3px solid var(--edge);display:inline-block}
 .qr img,.qr canvas{display:block;width:140px;height:140px}
 .urlbox{font-size:14px;font-weight:600;background:#fff;border:2px solid var(--edge);padding:8px 10px;word-break:break-all;font-family:ui-monospace,Menlo,monospace}
+/* 앱 내 확인창 */
+#modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(12,20,40,.6);padding:16px}
+#modal.show{display:flex}
+.mbox{background:var(--panel);border:3px solid var(--edge);padding:20px;width:100%;max-width:420px;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #A9A9A9,8px 8px 0 rgba(0,0,0,.4)}
+.mbox h3{font-size:19px}
+textarea.input{resize:vertical;min-height:84px;line-height:1.5}
+/* 미션 진행 단계 */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:2px solid var(--edge);background:#E4E4E4;color:#777;font-size:13.5px;font-weight:800;text-align:center;line-height:1.3}
+.step b{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:2px solid var(--edge);background:#fff;font-family:var(--pixel)}
+.step.now{background:#FFF0B3;color:var(--text);outline:3px solid var(--gold);outline-offset:-6px}
+.step.done{background:#CFF0BF;color:#1E5E10}
+.step.done b{background:var(--grass);color:#fff}
+.teamgoal{border:3px solid var(--edge);background:#fff;padding:12px 14px;box-shadow:inset -3px -3px 0 #D6D6D6}
+.teamgoal .lab{font-size:13.5px;font-weight:800;color:var(--sub)}
+.teamgoal .desc{font-size:17px;font-weight:800;margin-top:2px}
+.teamgoal .proof{margin-top:8px;font-size:14.5px;font-weight:700;display:flex;gap:6px;align-items:flex-start;background:#EAF4FF;border:2px dashed #3D7DD8;padding:6px 8px}
+.banner{border:3px solid var(--edge);padding:12px 14px;font-weight:800;display:flex;gap:10px;align-items:center;margin-top:12px}
+.banner.review{background:#FFF0B3} .banner.ok{background:#CFF0BF} .banner.retry{background:#FFD9D4}
+.parts{display:grid;gap:6px;margin-top:8px}
+.part{display:grid;grid-template-columns:40px 1fr 30px;gap:8px;align-items:center;padding:7px 8px;border:2px solid var(--edge);background:#E4E4E4}
+.part.me{background:#FFF0B3}
+.part.ok{background:#DDF5D2}
+.part .ricon{width:40px;height:40px;border:2px solid var(--edge);display:flex;align-items:center;justify-content:center}
+.part .who{font-weight:800;font-size:15px;line-height:1.3}
+.part .what{font-size:14px;font-weight:600;color:#333;line-height:1.4}
+.proofbox{margin-top:14px;border:3px solid var(--edge);padding:12px;background:#fff}
+.hist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.hist span{display:inline-flex;align-items:center;gap:4px;padding:3px 8px 3px 4px;border:2px solid var(--edge);background:#fff;font-size:13.5px;font-weight:700}
+.hist span.ok{background:#CFF0BF}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border:2px solid var(--edge);font-size:13.5px;font-weight:800;white-space:nowrap}
+.badge.doing{background:#fff} .badge.review{background:var(--gold)} .badge.approved{background:var(--grass);color:#fff} .badge.retry{background:#FFB4A8}
+.tmcard.review{outline:4px solid var(--gold);outline-offset:2px}
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:10px}
+.howto div{border:2px solid var(--edge);background:#fff;padding:8px 10px;font-size:14px;font-weight:700;line-height:1.45}
+.howto b{font-family:var(--pixel);color:var(--grass-d)}
 @media (max-width:600px){
   h1{font-size:26px} .mc-title{font-size:34px} .qtext{font-size:20px} .board{grid-template-columns:1fr}
   .bar{grid-template-columns:172px 1fr 34px;font-size:14px}
+  .card{padding:16px} .card.grass{padding-top:30px}
+  .thead{padding:10px 12px 12px} .thead .logo{font-size:16px;width:100%}
+  .tabs{gap:4px} .tab{flex:1;padding:9px 6px;font-size:14px;text-align:center}
+  .btn{padding:10px 14px} .btn.big{font-size:17px}
+  .qr img,.qr canvas{width:110px;height:110px}
+  .stats{grid-template-columns:repeat(3,1fr);gap:8px} .stat{padding:10px} .stat .n{font-size:26px} .stat .l{font-size:12.5px}
+  .sgrid{grid-template-columns:repeat(2,1fr)}
+  .tslot-grid{grid-template-columns:1fr 1fr}
+  .count{font-size:110px}
 }
+@media (max-width:380px){.bar{grid-template-columns:150px 1fr 30px;font-size:13px}.sgrid{grid-template-columns:1fr}.yn .btn{font-size:20px}}
 @media print{.thead,.tabs,.btn,#sky{display:none!important}}
 </style>
 </head>
@@ -282,6 +328,7 @@ h3{font-size:18px;font-weight:800;line-height:1.4}
 <div id="app"></div>
 <div id="overlay"></div>
 <div id="toast"></div>
+<div id="modal"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
@@ -510,6 +557,14 @@ const MISSIONS = [
   {id:'m12',i:'shield',t:'0명 소외 작전',d:'지금까지 말을 가장 적게 한 친구의 의견을 결과물에 꼭 반영하기',
     tasks:{captain:'모두에게 한 번씩 의견 묻기',presenter:'반영된 의견을 발표에 소개하기',researcher:'그 의견에 맞는 자료 찾아주기',idea:'그 의견을 정리해 적기',designer:'그 의견을 결과물에 표시하기',cheer:'의견 낸 친구에게 박수 유도하기'}}
 ];
+// 팀이 선생님께 인증할 것 (팀에서 1개)
+const PROOFS = {
+  m01:'기록한 아이디어 목록 보여주기 (팀원 수만큼)', m02:'정한 팀 목표 한 문장 쓰기', m03:'누가 누구를 어떻게 칭찬했는지 쓰기',
+  m04:'묶은 포스트잇과 붙인 제목 보여주기', m05:'모든 팀원의 손길이 들어간 결과물 보여주기', m06:'만든 질문과 답 목록 보여주기',
+  m07:'리허설에서 나온 고칠 점 쓰기', m08:'누가 누구를 어떻게 도왔는지 쓰기', m09:'투표로 뽑힌 베스트 한 줄 쓰기',
+  m10:'두 의견을 합친 결론 쓰기', m11:'팀 인증샷 1장 보여주기 (사진은 팀에서 1장만!)', m12:'결과물에 반영한 친구의 의견 쓰기'
+};
+MISSIONS.forEach(m=>m.proof=PROOFS[m.id]);
 const MISSION_BY_ID = Object.fromEntries(MISSIONS.map(m=>[m.id,m]));
 
 /* 팀 레벨(곡괭이 등급) & 팀 블록 */
@@ -542,6 +597,20 @@ function toast(msg,ms=2200){const t=$('#toast');t.textContent=msg;t.classList.ad
 function confetti(n=70){const col=['#5FAE36','#8B5E3C','#6FF0E6','#FCE65A','#D9483B','#3D63D8','#E6E6E6','#4BE07A'];for(let i=0;i<n;i++){const s=document.createElement('div');s.className='confetti';s.style.background=col[i%col.length];
   s.style.left=Math.random()*100+'vw';s.style.animationDuration=(1.8+Math.random()*1.8)+'s';s.style.animationDelay=(Math.random()*.6)+'s';const z=10+Math.floor(Math.random()*3)*4;s.style.width=s.style.height=z+'px';
   document.body.appendChild(s);setTimeout(()=>s.remove(),4200)}}
+// 앱 안에서 뜨는 확인/입력 창 (브라우저 기본 confirm·prompt는 일부 환경에서 막혀서 사용하지 않음)
+function ask({title='',msg='',input=null,ok='확인',cancel='취소',danger=false}={}){
+  return new Promise(res=>{
+    const m=$('#modal');
+    m.innerHTML=`<div class="mbox pop"><h3>${esc(title)}</h3>${msg?`<p class="sub" style="white-space:pre-line;margin-top:6px">${esc(msg)}</p>`:''}
+      ${input?`<input id="askIn" class="input" style="margin-top:12px" placeholder="${esc(input.placeholder||'')}" value="${esc(input.value||'')}" ${input.type?`type="${input.type}" inputmode="numeric"`:''}>`:''}
+      <div class="row" style="justify-content:flex-end;margin-top:16px">${cancel?`<button class="btn light" id="askNo">${esc(cancel)}</button>`:''}<button class="btn ${danger?'red':'green'}" id="askOk">${esc(ok)}</button></div></div>`;
+    m.classList.add('show');
+    const close=v=>{m.classList.remove('show');m.innerHTML='';res(v)};
+    $('#askOk').onclick=()=>close(input?$('#askIn').value:true);
+    const no=$('#askNo');if(no)no.onclick=()=>close(input?null:false);
+    const inp=$('#askIn');if(inp){inp.focus();inp.select();inp.onkeydown=e=>{if(e.key==='Enter')$('#askOk').click();if(e.key==='Escape')close(null)}}
+  });
+}
 function overlay(html){const o=$('#overlay');o.innerHTML=html;o.classList.add('show');return o}
 function closeOverlay(){const o=$('#overlay');o.classList.remove('show');o.innerHTML=''}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
@@ -715,7 +784,7 @@ function studentEntry(){
     if(!name)return toast('이름을 입력해 주세요');
     const sid='n'+String(num).padStart(2,'0');
     const ex=await DB.get(`rooms/${room}/students/${sid}`);
-    if(ex&&ex.name!==name&&!confirm(`${num}번은 이미 "${ex.name}" 학생이 입장했어요.\n내가 ${num}번 ${name}이(가) 맞나요? (기존 기록을 덮어써요)`))return;
+    if(ex&&ex.name!==name&&!(await ask({title:'이미 입장한 번호예요',msg:`${num}번은 이미 "${ex.name}" 학생이 입장했어요.\n내가 ${num}번 ${name}이(가) 맞나요? (기존 기록을 덮어써요)`,ok:'내가 맞아요'})))return;
     if(!(ex&&ex.name===name))await DB.set(`rooms/${room}/students/${sid}`,{num,name,status:'testing',joinedAt:Date.now()});
     ME.set({room,sid});S.room=room;S.sid=sid;
     S.unsubList&&S.unsubList();S.unsubList=null;
@@ -801,8 +870,8 @@ async function finishQuiz(){
   renderStudent();
   confetti(50);
 }
-function retakeQuiz(){
-  if(!confirm('테스트를 다시 할까요? 지금 결과는 사라져요.'))return;
+async function retakeQuiz(){
+  if(!(await ask({title:'테스트를 다시 할까요?',msg:'지금 결과는 사라져요.',ok:'다시 하기'})))return;
   LS.del(`tm_quiz_${S.room}_${S.sid}`);
   DB.update(`rooms/${S.room}/students/${S.sid}`,{status:'testing',answers:null,raw:null,norm:null,role:null});
 }
@@ -853,19 +922,20 @@ function myTeam(d){const teams=d.teams||{};for(const tid in teams){if(teams[tid]
 function teamProgress(d,tid,team){
   const mem=Object.keys((team&&team.members)||{});
   const ms=((d.missions||{})[tid])||{};const rounds=ms.rounds||{};
-  let cleared=0;
-  for(const rid in rounds){const ch=rounds[rid].checks||{};if(mem.length&&mem.every(s=>ch[s]))cleared++}
+  const list=Object.entries(rounds).map(([rid,r])=>({rid,...r})).sort((a,b)=>((a.at||0)-(b.at||0))||(a.rid<b.rid?-1:1));
+  const cleared=list.filter(r=>r.status==='approved').length;
   const bonus=((d.bonus||{})[tid])||0;
   const cur=ms.cur&&rounds[ms.cur]?{rid:ms.cur,...rounds[ms.cur]}:null;
+  const curNo=cur?list.findIndex(r=>r.rid===cur.rid)+1:0;
   const curDone=cur?mem.filter(s=>(cur.checks||{})[s]).length:0;
-  return {stars:cleared+bonus,cleared,bonus,cur,curDone,total:mem.length,mem};
+  return {stars:cleared+bonus,cleared,bonus,cur,curNo,curDone,total:mem.length,mem,list};
 }
 function classStars(d){let t=0;for(const tid in (d.teams||{}))t+=teamProgress(d,tid,d.teams[tid]).stars;return t}
 function goalInner(d){
   const goal=d.goal||10,have=classStars(d),p=Math.min(100,Math.round(have/goal*100));
   return `<div class="goalbox"><div class="slotbg" style="padding:6px;display:flex">${ico('chest',44)}</div><div class="grow">
     <h3>우리 반 공동 목표 ${have>=goal?'— 달성!':''}</h3>
-    <p class="note" style="margin:2px 0 8px">모든 팀의 별을 합쳐 ${goal}개를 모으면 우리 반 보상 상자 열림!</p>
+    <p class="note" style="margin:2px 0 8px">선생님 승인을 받은 미션마다 별 1개! 모든 팀의 별을 합쳐 ${goal}개면 우리 반 보상 상자 열림!</p>
     <div class="gauge blue"><div class="fill" style="width:${p}%"></div><div class="lbl">${STAR(14)} ${have} / ${goal}</div></div></div></div>`;
 }
 const goalHTML=d=>`<div class="card">${goalInner(d)}</div>`;
@@ -894,8 +964,16 @@ function renderTeam(first){
     LS.set(seenMKey,P.cur.rid);S.busy=true;
     return studentSlot(M,()=>{S.busy=false;renderTeam(false)});
   }
-  const clrKey=`tm_cleared_${S.room}_${tid}_${P.cur&&P.cur.rid}`;
-  if(P.cur&&P.total&&P.curDone===P.total&&!LS.get(clrKey)){LS.set(clrKey,1);setTimeout(()=>{confetti(80);toast('미션 클리어! 팀 별 +1',3000)},300)}
+  const stt=P.cur?(P.cur.status||'doing'):null;
+  const allDone=!!(P.total&&P.curDone===P.total);
+  const locked=stt==='review'||stt==='approved';
+  if(P.cur){
+    const k1=`tm_alldone_${S.room}_${P.cur.rid}`;if(allDone&&!locked&&!LS.get(k1)){LS.set(k1,1);setTimeout(()=>toast('팀원 모두 완료! 이제 팀 인증을 남겨 선생님께 확인받아요',3500),300)}
+    const k2=`tm_appr_${S.room}_${P.cur.rid}`;if(stt==='approved'&&!LS.get(k2)){LS.set(k2,1);setTimeout(()=>{confetti(90);toast('선생님 승인! 팀 별 +1 획득',3500)},300)}
+  }
+  // 입력 중인 인증 글은 화면이 새로 그려져도 유지
+  const pf=$('#proofIn');const pfFocus=!!(pf&&document.activeElement===pf);
+  S.drafts=S.drafts||{};if(pf)S.drafts[pf.dataset.rid]=pf.value;
 
   const changed=st.role&&st.role!==myRole;
   const blk=teamBlock(team);
@@ -916,29 +994,59 @@ function renderTeam(first){
       <div class="tip">${ico('bubble',22)}<span>${R.tip}</span></div></div>
 
     ${M?`<div class="card mission">
-      <div class="mhead">${ico(M.i,44)}<div><div class="kicker">COOP MISSION</div><div class="ttl">${M.t}</div></div></div>
+      <div class="mhead">${ico(M.i,44)}<div><div class="kicker">팀 협력 미션 #${P.curNo}</div><div class="ttl">${M.t}</div></div></div>
       <div class="mbody">
-        <p class="desc">${M.d}</p>
-        <div class="mytask"><div class="lab">${ico(R.i,18)}나(${R.name})의 미션</div><div class="txt">${M.tasks[myRole]||'팀원 돕기'}</div></div>
-        <button class="btn big donebtn ${iDid?'on':''}" id="doneBtn">${iDid?`${ico('check',22)} 완료! (다시 누르면 취소)`:'내 미션 완료하기'}</button>
-        <div style="margin-top:14px"><div class="row between"><b>팀 미션 진행도</b><span class="pill">${P.curDone} / ${P.total}명</span></div>
-          <div class="gauge green" style="margin-top:6px"><div class="fill" style="width:${curPct}%"></div><div class="lbl">${curPct===100?'미션 클리어!':curPct+'%'}</div></div>
-          <p class="note" style="margin-top:6px">팀원 <b>모두</b>가 완료해야 별을 얻어요. 한 명도 빠지면 안 돼요!</p></div>
+        <div class="steps">
+          <div class="step ${allDone||locked?'done':'now'}"><b>1</b>각자 내 몫 하기</div>
+          <div class="step ${locked?'done':(allDone?'now':'')}"><b>2</b>팀 인증 남기기</div>
+          <div class="step ${stt==='approved'?'done':(stt==='review'?'now':'')}"><b>3</b>선생님 확인</div>
+        </div>
+        <div class="teamgoal"><div class="lab">팀 목표 · 우리 팀이 함께 1개를 완성해요</div><div class="desc">${M.d}</div>
+          <div class="proof">${ico('paper',18)}<span>선생님께 보여줄 것: ${M.proof}</span></div></div>
+        ${stt==='retry'?`<div class="banner retry">${ico('bubble',24)}<span>선생님: "${esc(P.cur.note||'조금 더 보완해 주세요')}"<br>보완해서 다시 확인을 요청해요</span></div>`:''}
+        ${stt==='review'?`<div class="banner review">${ico('hourglass',24)}<span>선생님이 확인 중이에요. 결과물을 보여드릴 준비를 해요!</span></div>`:''}
+        ${stt==='approved'?`<div class="banner ok">${STAR(26)}<span>미션 성공! 팀 별 +1<br>선생님이 다음 미션을 뽑을 때까지 기다려요</span></div>`:''}
+        <div class="mytask"><div class="lab">${ico(R.i,18)}이 미션에서 나(${R.name})의 몫</div><div class="txt">${M.tasks[myRole]||'팀원 돕기'}</div></div>
+        <button class="btn big donebtn ${iDid?'on':''}" id="doneBtn" ${locked?'disabled':''}>${iDid?`${ico('check',22)} 내 몫 완료!${locked?'':' (다시 누르면 취소)'}`:'내 몫을 했어요'}</button>
+        <h3 style="margin-top:16px">팀원별 몫 <span class="note">— 모두 해야 성공해요</span></h3>
+        <div class="gauge green" style="margin-top:6px"><div class="fill" style="width:${curPct}%"></div><div class="lbl">${P.curDone} / ${P.total}명 완료</div></div>
+        <div class="parts">${mates.map(m=>{const r=ROLES[m.r]||ROLES.cheer;const ok=checks[m.sid];
+          return `<div class="part ${m.sid===S.sid?'me':''} ${ok?'ok':''}"><div class="ricon" style="background:#fff;border-left:6px solid ${r.color}">${ico(r.i,26)}</div>
+            <div><div class="who">${esc(m.name)}${m.sid===S.sid?' (나)':''} · ${r.name}</div><div class="what">${esc(M.tasks[m.r]||'팀원 돕기')}</div></div>
+            <div>${ok?ico('check',26):ico('hourglass',24,'opacity:.45')}</div></div>`}).join('')}
+          ${ROLE_IDS.filter(r=>!Object.values(team.members).includes(r)).map(r=>{const rr=ROLES[r];
+            return `<div class="part" style="background:#F4F4F4;border-style:dashed"><div class="ricon" style="background:#fff;border-left:6px solid ${rr.color}">${ico(rr.i,26)}</div>
+            <div><div class="who">빈 역할 · ${rr.name} 몫은 다 같이!</div><div class="what">${esc(M.tasks[r]||'')}</div></div><div></div></div>`}).join('')}</div>
+        <div class="proofbox">
+          <h3 class="ico-h">${ico('paper',22)}팀 인증 남기기 <span class="note">(팀에서 1명만)</span></h3>
+          ${locked?`<p style="margin-top:8px;font-weight:700;white-space:pre-line">${esc(P.cur.proof||'')}</p><p class="note" style="margin-top:4px">작성: ${esc((studs[P.cur.proofBy]||{}).name||'')}</p>`
+          :`<p class="note" style="margin-top:4px">${allDone?'모두 완료했어요! 무엇을 했는지 쓰고 선생님께 확인을 요청해요.':'팀원 모두가 \'내 몫을 했어요\'를 누르면 확인 요청을 보낼 수 있어요.'}</p>
+            <textarea id="proofIn" data-rid="${P.cur.rid}" class="input" style="margin-top:8px" maxlength="300" placeholder="예) ${esc(M.proof)}">${esc(S.drafts[P.cur.rid]??(P.cur.proof||''))}</textarea>
+            <button class="btn big yellow" id="proofGo" style="margin-top:8px" ${allDone?'':'disabled'}>선생님께 확인 요청</button>`}
+        </div>
       </div></div>`
-    :`<div class="card center">${ico('die',48)}<h3 style="margin-top:6px">협력 미션 대기 중</h3><p class="sub" style="margin-top:4px">선생님이 미션을 뽑으면 여기에 나타나요!</p></div>`}
+    :`<div class="card center">${ico('die',48)}<h3 style="margin-top:6px">협력 미션 대기 중</h3><p class="sub" style="margin-top:4px">선생님이 미션을 뽑으면 여기에 나타나요!<br>미션은 팀이 함께 1개를 완성하고, 팀원마다 맡은 몫이 있어요.</p></div>`}
+
+    ${P.list.filter(r=>!P.cur||r.rid!==P.cur.rid).length?`<div class="card"><h3>지난 미션 기록</h3><div class="hist">${P.list.map((r,i)=>{if(P.cur&&r.rid===P.cur.rid)return '';const m=MISSION_BY_ID[r.mid]||{};
+      return `<span class="${r.status==='approved'?'ok':''}">${ico(m.i||'paper',18)}#${i+1} ${m.t||''} · ${r.status==='approved'?'성공':'미완료'}</span>`}).join('')}</div></div>`:''}
 
     <div class="card"><h3 style="margin-bottom:10px">우리 팀 (${mates.length}명)</h3><div class="members">
-      ${mates.map(m=>{const r=ROLES[m.r]||ROLES.cheer;const ok=checks[m.sid];
-        return `<div class="member ${m.sid===S.sid?'me':''}"><div class="ricon" style="background:${r.color}">${ico(r.i,32)}</div>
+      ${mates.map(m=>{const r=ROLES[m.r]||ROLES.cheer;
+        return `<div class="member ${m.sid===S.sid?'me':''}"><div class="ricon" style="background:#fff;border-left:6px solid ${r.color}">${ico(r.i,30)}</div>
           <div><div class="who">${esc(m.name)} ${m.sid===S.sid?'<span class="pill" style="font-size:12px;padding:1px 6px">나</span>':''}</div>
-          <div class="what">${r.name}${M?` · ${esc(M.tasks[m.r]||'')}`:''}</div></div>
-          ${M?`<div class="chk">${ok?ico('check',28):ico('hourglass',26,'opacity:.55')}</div>`:''}</div>`}).join('')}
+          <div class="what">${r.name} · ${r.job}</div></div></div>`}).join('')}
     </div></div>
     ${goalHTML(d)}
-    <div class="center"><button class="btn ghost" onclick="if(confirm('입장 화면으로 나갈까요?'))studentLogout()">나가기</button></div>
+    <div class="center"><button class="btn ghost" onclick="ask({title:'입장 화면으로 나갈까요?',ok:'나가기'}).then(v=>v&&studentLogout())">나가기</button></div>
   </div>`;
   const b=$('#doneBtn');
-  if(b)b.onclick=()=>DB.set(`rooms/${S.room}/missions/${tid}/rounds/${P.cur.rid}/checks/${S.sid}`,iDid?null:true);
+  if(b&&!locked)b.onclick=()=>DB.set(`rooms/${S.room}/missions/${tid}/rounds/${P.cur.rid}/checks/${S.sid}`,iDid?null:true);
+  const pi=$('#proofIn');
+  if(pi){pi.oninput=()=>{S.drafts[pi.dataset.rid]=pi.value};if(pfFocus){pi.focus();pi.setSelectionRange(pi.value.length,pi.value.length)}}
+  const pg=$('#proofGo');
+  if(pg)pg.onclick=async()=>{const t=(pi.value||'').trim();if(t.length<2)return toast('무엇을 했는지 한 줄 이상 써 주세요');
+    await DB.update(`rooms/${S.room}/missions/${tid}/rounds/${P.cur.rid}`,{proof:t,proofBy:S.sid,status:'review',reqAt:Date.now(),note:null});
+    delete S.drafts[P.cur.rid];toast('선생님께 확인을 요청했어요!')};
 }
 async function studentSlot(M,done){
   overlay(`<div class="slotbox pop"><h2 class="ico-h" style="justify-content:center">${ico('die',28)}협력 미션 뽑는 중</h2>
@@ -991,7 +1099,7 @@ function subscribeRoom(){
   TS.unsub=DB.on(`rooms/${TS.room}`,d=>{TS.data=d;if(TS.dragging){TS.pending=true;return}renderTeacher()});
 }
 async function createRoom(){
-  const name=prompt('반 이름을 입력하세요 (예: 2-3, 2학년 3반)');if(!name||!name.trim())return;
+  const name=await ask({title:'새 반 만들기',msg:'반 이름을 입력하세요 (예: 2-3, 2학년 3반)',input:{placeholder:'2-3'},ok:'만들기'});if(!name||!name.trim())return;
   const key=roomKeyOf(name);
   if(TS.rooms[key])return toast('이미 있는 반이에요');
   await DB.update('',{[`roomList/${key}`]:name.trim(),[`rooms/${key}/meta`]:{name:name.trim(),createdAt:Date.now()},[`rooms/${key}/goal`]:10});
@@ -999,7 +1107,7 @@ async function createRoom(){
 }
 async function deleteRoom(){
   const nm=TS.rooms[TS.room];
-  if(!confirm(`"${nm}" 반을 통째로 삭제할까요?\n학생 기록·팀·미션이 모두 지워져요.`))return;
+  if(!(await ask({title:`"${nm}" 반을 삭제할까요?`,msg:'학생 기록·팀·미션이 모두 지워져요.',ok:'삭제',danger:true})))return;
   await DB.update('',{[`roomList/${TS.room}`]:null,[`rooms/${TS.room}`]:null});
   TS.room=null;toast('삭제했어요');
 }
@@ -1071,17 +1179,17 @@ function tabTest(d){
   </div>`;
   try{if(window.QRCode)new QRCode($('#qr'),{text:studentURL(),width:280,height:280,correctLevel:QRCode.CorrectLevel.M});else $('#qr').innerHTML='<div style="width:140px;height:140px;display:flex;align-items:center;justify-content:center" class="note">QR 불러오기 실패</div>'}catch{}
   $('#copyUrl').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(studentURL()).then(()=>toast('주소를 복사했어요!'),()=>toast('복사 실패: 주소를 직접 선택해 주세요'))};
-  $$('[data-del]').forEach(b=>b.onclick=()=>{const sid=b.dataset.del;const s=d.students[sid];
-    if(!confirm(`${s.num}번 ${s.name} 학생 기록을 지울까요?`))return;
+  $$('[data-del]').forEach(b=>b.onclick=async()=>{const sid=b.dataset.del;const s=d.students[sid];
+    if(!(await ask({title:`${s.num}번 ${s.name} 학생을 지울까요?`,msg:'테스트 결과와 팀 배정에서 빠져요. 학생 화면은 입장 화면으로 돌아가요.',ok:'지우기',danger:true})))return;
     const up={[`students/${sid}`]:null};for(const tid in (d.teams||{}))if(d.teams[tid].members&&d.teams[tid].members[sid])up[`teams/${tid}/members/${sid}`]=null;
-    DB.update(`rooms/${TS.room}`,up)});
+    await DB.update(`rooms/${TS.room}`,up);toast(`${s.num}번 ${s.name} 학생을 지웠어요`)});
   $('#addBots').onclick=()=>addBots(d);
-  $('#resetRoom').onclick=()=>{if(!confirm('학생 기록·팀·미션을 모두 지우고 새로 시작할까요? (반은 유지)'))return;
+  $('#resetRoom').onclick=async()=>{if(!(await ask({title:'이 반 기록을 초기화할까요?',msg:'학생 기록·팀·미션이 모두 지워지고 새로 시작해요. (반은 그대로 남아요)',ok:'초기화',danger:true})))return;
     DB.update(`rooms/${TS.room}`,{students:null,teams:null,missions:null,bonus:null,revealed:false,revealAt:null});toast('초기화했어요')};
   $('#delRoom').onclick=deleteRoom;
 }
-function addBots(d){
-  const n=parseInt(prompt('가상 학생 몇 명을 추가할까요? (팀 편성 연습용)','20'),10);if(!n||n<1)return;
+async function addBots(d){
+  const n=parseInt(await ask({title:'가상 학생 추가 (연습용)',msg:'몇 명을 추가할까요?',input:{value:'20',type:'number'},ok:'추가'}),10);if(!n||n<1)return;
   const fam=['김','이','박','최','정','강','조','윤','장','임','한','오','서','신','권'],giv=['민준','서준','도윤','예준','시우','하준','주원','지호','지후','준우','현우','건우','우진','선우','유찬','연우','은우','정우','승우','시윤'];
   const used=new Set(Object.values(d.students||{}).map(s=>s.num));const up={};let num=1,added=0;
   while(added<n&&num<100){if(!used.has(num)){const ans=Array.from({length:QUESTIONS.length},()=>Math.random()<.5?'Y':'N').join('');const sc=scoreAnswers(ans);
@@ -1138,19 +1246,19 @@ function tabTeam(d){
   let tc=defCount;
   const setTc=v=>{tc=Math.max(1,Math.min(12,v));$('#tcVal').textContent=tc;DB.set(`rooms/${TS.room}/teamCount`,tc)};
   $('#tcMinus').onclick=()=>setTc(tc-1);$('#tcPlus').onclick=()=>setTc(tc+1);
-  $('#doAssign').onclick=()=>{
+  $('#doAssign').onclick=async()=>{
     if(!done.length)return toast('테스트를 마친 학생이 없어요');
-    if(tids.length&&!confirm('지금 팀 구성을 지우고 새로 배정할까요?'))return;
+    if(tids.length&&!(await ask({title:'팀을 새로 배정할까요?',msg:'지금 팀 구성과 미션 기록이 지워져요.',ok:'새로 배정'})))return;
     if(tc>done.length)return toast('팀 수가 학생 수보다 많아요');
     const t=buildTeams(done,tc);
     DB.update(`rooms/${TS.room}`,{teams:t,missions:null,bonus:null,revealed:false});
     toast('팀 배정 완료! 확인 후 공개해 주세요');
   };
-  const rb=$('#revealBtn');if(rb)rb.onclick=()=>{
+  const rb=$('#revealBtn');if(rb)rb.onclick=async()=>{
     const empty=tids.filter(t=>!Object.keys(teams[t].members||{}).length);
     const left=pool.filter(s=>s.status==='done').length;
-    if(left&&!confirm(`미배정 학생이 ${left}명 있어요. 그래도 공개할까요?`))return;
-    if(empty.length&&!confirm('빈 팀이 있어요. 그래도 공개할까요?'))return;
+    if(left&&!(await ask({title:'미배정 학생이 있어요',msg:`${left}명이 아직 팀이 없어요. 그래도 공개할까요?`,ok:'공개'})))return;
+    if(empty.length&&!(await ask({title:'빈 팀이 있어요',msg:'그래도 공개할까요?',ok:'공개'})))return;
     DB.update(`rooms/${TS.room}`,{revealed:true,revealAt:Date.now()});confetti(60);toast('모든 학생 화면에 팀이 공개됐어요!');
   };
   const hb=$('#hideBtn');if(hb)hb.onclick=()=>{DB.set(`rooms/${TS.room}/revealed`,false);toast('학생 화면에서 팀을 숨겼어요')};
@@ -1214,37 +1322,58 @@ function tabMission(d){
   if(!tids.length){$('#tbody').innerHTML=`<div class="card center">${cubeHTML('grass',56,true)}<h3>먼저 팀을 편성해 주세요</h3>
     <button class="btn green" style="margin-top:14px" onclick="TS.tab='team';renderTeacher()">② 팀 편성으로 →</button></div>`;return}
   const goal=d.goal||10;
+  const reviewN=tids.filter(t=>{const c=teamProgress(d,t,teams[t]).cur;return c&&c.status==='review'}).length;
   $('#tbody').innerHTML=`<div class="stack">
     <div class="card"><div class="row between">
-      <div><h3>협력 미션 뽑기</h3><p class="note" style="margin-top:4px">팀마다 다른 미션이 랜덤으로 배정돼요. 각 팀원은 자기 역할의 미션을 완료하고 체크! <b>팀원 모두</b> 완료하면 별 +1</p></div>
-      <div class="row"><button class="btn big yellow" style="width:auto" id="drawAll">${ico('die',26)} 전체 팀 미션 뽑기</button></div></div>
+      <h3 class="ico-h">협력 미션 ${reviewN?`<span class="badge review">확인 대기 ${reviewN}팀</span>`:''}</h3>
+      <button class="btn big yellow" style="width:auto" id="drawAll">${ico('die',26)} 전체 팀 미션 뽑기</button></div>
+      <div class="howto">
+        <div><b>1</b> 선생님이 미션을 뽑아요. 팀마다 다른 미션 1개가 학생 화면에 떠요.</div>
+        <div><b>2</b> 팀원은 각자 자기 역할의 몫을 하고 '내 몫을 했어요'를 눌러요.</div>
+        <div><b>3</b> 모두 완료하면 팀에서 1명이 인증 글을 쓰고 확인을 요청해요.</div>
+        <div><b>4</b> 결과물을 보고 승인하면 팀 별 +1! 다음 미션을 또 뽑아요.</div>
+      </div>
       ${d.revealed?'':'<p class="note warn-t" style="margin-top:8px">팀이 아직 학생들에게 공개되지 않았어요. 학생들은 공개 후에 미션을 볼 수 있어요.</p>'}
     </div>
     <div class="card"><div class="row between"><div class="grow" style="min-width:240px">${goalInner(d)}</div>
       <div class="row"><span class="note">목표 별</span><button class="btn sm light" id="gMinus">－</button><b>${goal}</b><button class="btn sm light" id="gPlus">＋</button></div></div></div>
     <div class="board">${tids.map(tid=>{const t=teams[tid];const P=teamProgress(d,tid,t);const L=levelOf(P.stars);const M=P.cur?MISSION_BY_ID[P.cur.mid]:null;
       const ch=(P.cur&&P.cur.checks)||{};const pct=P.total?Math.round(P.curDone/P.total*100):0;
+      const stt=P.cur?(P.cur.status||'doing'):null;
+      const badge=!P.cur?'':stt==='review'?'<span class="badge review">확인 대기</span>':stt==='approved'?'<span class="badge approved">승인 완료</span>':stt==='retry'?'<span class="badge retry">다시 하기 중</span>':`<span class="badge doing">진행 중 ${P.curDone}/${P.total}</span>`;
       const mates=sortStudents(P.mem.map(s=>({sid:s,...(studs[s]||{name:'?'}),r:t.members[s]})));
-      return `<div class="card tmcard">
+      return `<div class="card tmcard ${stt==='review'?'review':''}">
         <div class="row between"><h3 class="ico-h">${blockIco(teamBlock(t),26)} ${t.no}모둠 · ${esc(t.name)}</h3><span class="pill" style="font-size:15px">${STAR(16)} ${P.stars}</span></div>
-        <div class="row" style="margin-top:6px">${ico(L.i,30)}<b>Lv.${L.idx+1} ${L.n}</b><span class="note">(클리어 ${P.cleared} · 보너스 ${P.bonus})</span></div>
-        ${M?`<div class="cur"><div class="ico-h" style="font-weight:800">${ico(M.i,22)}${M.t}</div><div class="note" style="margin-top:2px">${M.d}</div>
-          <div class="gauge green" style="margin-top:8px"><div class="fill" style="width:${pct}%"></div><div class="lbl">${pct===100?'클리어!':`${P.curDone}/${P.total}`}</div></div>
-          <div class="mchips">${mates.map(m=>`<button class="mchip ${ch[m.sid]?'ok':''}" data-chk="${tid}|${P.cur.rid}|${m.sid}" title="${esc((M.tasks[m.r]||''))}">${rIco(m.r,18)}${esc(m.name)}</button>`).join('')}</div></div>`
-          :`<div class="cur note">아직 미션이 없어요</div>`}
+        <div class="row" style="margin-top:6px">${ico(L.i,30)}<b>Lv.${L.idx+1} ${L.n}</b><span class="note">(성공 ${P.cleared} · 보너스 ${P.bonus})</span></div>
+        ${M?`<div class="cur"><div class="row between"><div class="ico-h" style="font-weight:800">${ico(M.i,22)}#${P.curNo} ${M.t}</div>${badge}</div>
+          <div class="note" style="margin-top:2px">${M.d}</div>
+          <div class="note" style="margin-top:4px;color:#1E4E9A">확인할 것: ${M.proof}</div>
+          <div class="gauge green" style="margin-top:8px"><div class="fill" style="width:${pct}%"></div><div class="lbl">${P.curDone}/${P.total}명 내 몫 완료</div></div>
+          <div class="mchips">${mates.map(m=>`<button class="mchip ${ch[m.sid]?'ok':''}" data-chk="${tid}|${P.cur.rid}|${m.sid}" title="${esc((M.tasks[m.r]||''))}">${rIco(m.r,18)}${esc(m.name)}</button>`).join('')}</div>
+          ${P.cur.proof?`<div class="proofbox" style="margin-top:8px;padding:8px 10px"><div class="note">팀 인증 · ${esc((studs[P.cur.proofBy]||{}).name||'')}</div><div style="font-weight:700;white-space:pre-line">${esc(P.cur.proof)}</div></div>`:''}
+          ${stt==='review'?`<div class="row" style="margin-top:8px"><button class="btn sm green" data-appr="${tid}|${P.cur.rid}">${STAR(14)} 승인 (별 +1)</button><button class="btn sm light" data-retry="${tid}|${P.cur.rid}">다시 하기</button></div>`:''}
+          ${stt==='approved'?`<div class="row" style="margin-top:8px"><button class="btn sm light" data-unappr="${tid}|${P.cur.rid}">승인 취소</button></div>`:''}
+        </div>`:`<div class="cur note">아직 미션이 없어요</div>`}
+        ${P.list.length?`<div class="hist" style="margin-bottom:8px">${P.list.map((r,i)=>{const m=MISSION_BY_ID[r.mid]||{};return `<span class="${r.status==='approved'?'ok':''}" title="${esc(m.t||'')}">${ico(m.i||'paper',16)}#${i+1}${r.status==='approved'?' 성공':''}</span>`}).join('')}</div>`:''}
         <div class="row"><button class="btn sm light" data-draw="${tid}">${ico('die',16)} 이 팀만 ${M?'새 미션':'뽑기'}</button>
           <span class="grow"></span><button class="btn sm yellow" data-bonus="${tid}|1" title="보너스 별">${STAR(14)}+1</button><button class="btn sm light" data-bonus="${tid}|-1" title="보너스 별 빼기">−1</button></div>
       </div>`}).join('')}</div>
     <div class="row" style="justify-content:flex-end"><button class="btn sm red" id="resetMissions">미션·별 기록 초기화</button></div>
   </div>`;
+  const rpath=v=>{const [tid,rid]=v.split('|');return `rooms/${TS.room}/missions/${tid}/rounds/${rid}`};
   $('#drawAll').onclick=()=>drawMissions(tids,true);
   $$('[data-draw]').forEach(b=>b.onclick=()=>drawMissions([b.dataset.draw],false));
   $$('[data-chk]').forEach(b=>b.onclick=()=>{const [tid,rid,sid]=b.dataset.chk.split('|');const v=(((d.missions[tid]||{}).rounds||{})[rid]||{}).checks||{};
     DB.set(`rooms/${TS.room}/missions/${tid}/rounds/${rid}/checks/${sid}`,v[sid]?null:true)});
+  $$('[data-appr]').forEach(b=>b.onclick=()=>{DB.update(rpath(b.dataset.appr),{status:'approved',apprAt:Date.now()});confetti(40);toast('승인! 팀 별 +1')});
+  $$('[data-unappr]').forEach(b=>b.onclick=()=>DB.update(rpath(b.dataset.unappr),{status:'review'}));
+  $$('[data-retry]').forEach(b=>b.onclick=async()=>{
+    const note=await ask({title:'다시 하기 요청',msg:'팀에게 보낼 한마디 (무엇을 보완하면 될까요?)',input:{placeholder:'예) 모든 팀원의 의견이 들어가게 해 주세요'},ok:'보내기'});
+    if(note===null)return;DB.update(rpath(b.dataset.retry),{status:'retry',note:note.trim()||'조금 더 보완해 주세요'});toast('팀에게 다시 하기를 요청했어요')});
   $$('[data-bonus]').forEach(b=>b.onclick=()=>{const [tid,v]=b.dataset.bonus.split('|');const cur=((d.bonus||{})[tid])||0;DB.set(`rooms/${TS.room}/bonus/${tid}`,Math.max(0,cur+(+v)))});
   $('#gMinus').onclick=()=>DB.set(`rooms/${TS.room}/goal`,Math.max(1,goal-1));
   $('#gPlus').onclick=()=>DB.set(`rooms/${TS.room}/goal`,goal+1);
-  $('#resetMissions').onclick=()=>{if(confirm('모든 팀의 미션과 별 기록을 지울까요?'))DB.update(`rooms/${TS.room}`,{missions:null,bonus:null})};
+  $('#resetMissions').onclick=async()=>{if(await ask({title:'미션·별 기록을 초기화할까요?',msg:'모든 팀의 미션과 별이 지워져요.',ok:'초기화',danger:true}))DB.update(`rooms/${TS.room}`,{missions:null,bonus:null})};
 }
 function pickMissions(d,tids){
   const res={};const takenNow=new Set();
@@ -1260,8 +1389,8 @@ function pickMissions(d,tids){
 }
 async function drawMissions(tids,all){
   const d=TS.data;const teams=d.teams;
-  const pending=tids.filter(tid=>{const P=teamProgress(d,tid,teams[tid]);return P.cur&&P.curDone<P.total});
-  if(pending.length&&!confirm(`아직 미션을 다 못 끝낸 팀이 ${pending.length}팀 있어요. 새 미션을 뽑을까요?\n(못 끝낸 미션은 별 없이 넘어가요)`))return;
+  const pending=tids.filter(tid=>{const P=teamProgress(d,tid,teams[tid]);return P.cur&&P.cur.status!=='approved'});
+  if(pending.length&&!(await ask({title:'아직 승인 안 된 미션이 있어요',msg:`${pending.length}팀이 지금 미션을 진행 중이에요. 새 미션을 뽑을까요?\n(승인 안 된 미션은 별 없이 넘어가요)`,ok:'새로 뽑기'})))return;
   const picks=pickMissions(d,tids);
   const tn=tid=>`<div class="tn">${blockIco(teamBlock(teams[tid]),20)}${teams[tid].no}모둠</div>`;
   overlay(`<div class="tslot pop"><div class="row between"><h2 class="ico-h">${ico('die',30)}협력 미션 뽑기!</h2><button class="btn sm light" id="tsClose" style="visibility:hidden">닫기 ✕</button></div>
